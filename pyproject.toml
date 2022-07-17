@@ -13,6 +13,10 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 Jinja2 = "^3.1.2"
+pyproject-parser = "^0.7.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "22.6.0"
 
 [build-system]
 requires = ["poetry>=1.2.0b2"]
@@ -20,3 +24,8 @@ build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
 "readme-patcher.py" = "readme_patcher:patch"
+
+[[tool.readme_patcher.file]]
+src = "README_template.rst"
+dest = "README"
+vars = { cli_output = "lol" }

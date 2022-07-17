@@ -11,5 +11,6 @@
     "**/doc/html/": true,
     "**/.mypy_cache/": true
   },
-  "esbonio.sphinx.confDir": ""
+  "esbonio.sphinx.confDir": "",
+  "python.formatting.provider": "black"
 }
