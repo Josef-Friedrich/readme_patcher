@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
 from typing import Dict, Optional, TypedDict
@@ -5,7 +7,7 @@ from typing import Dict, Optional, TypedDict
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
 
-from . import functions, filters
+from . import filters, functions
 
 
 def setup_template_env(pwd: "os.PathLike[str]") -> Environment:

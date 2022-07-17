@@ -1,10 +1,9 @@
 import os
 import tempfile
-from typing import Optional
 import unittest
+from typing import Optional
 
 from readme_patcher import Project, Variables
-
 
 FILES_DIR = os.path.join(os.path.dirname(__file__), "files")
 
