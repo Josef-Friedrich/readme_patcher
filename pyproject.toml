@@ -24,9 +24,4 @@ requires = ["poetry>=1.2.0b2", "setuptools", "setuptools-scm"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-"readme-patcher" = "readme_patcher:patch"
-
-[[tool.readme_patcher.file]]
-src = "README_template.rst"
-dest = "README.rst"
-vars = { cli_output = "Patched in text", cwd = "func:os.getcwd", uname = "cli:fortune --help" }
+"readme-patcher" = "readme_patcher:main"

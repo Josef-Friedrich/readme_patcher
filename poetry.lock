@@ -184,7 +184,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 name = "isort"
 version = "5.10.1"
 description = "A Python utility / library to sort Python imports."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.1,<4.0"
 
@@ -389,7 +389,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "17ba676c21b67d0807ae3c47ccbdc99ee0698d514a51a5a640801d7043ce7d3e"
+content-hash = "298df198ea9a3d8fc1ff0e2d00888c5f6ca20fc4f8c3b07de570c4628876330b"
 
 [metadata.files]
 apeye = []

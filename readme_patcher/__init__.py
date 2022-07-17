@@ -51,7 +51,6 @@ class FileConfig(TypedDict):
     src: str
     dest: str
     variables: Dict[str, str]
-    parent: Path
 
 
 Variables = Dict[str, str]
@@ -60,20 +59,20 @@ Variables = Dict[str, str]
 class File:
     """A file to patch."""
 
-    parent: Path
+    base_dir: Path
     src: str
     dest: str
     variables: Optional[Variables] = None
 
     def __init__(
         self,
-        parent: Path,
+        base_dir: Path,
         src: Optional[str] = None,
         dest: Optional[str] = None,
         variables: Optional[Variables] = None,
         config: Optional[FileConfig] = None,
     ):
-        self.parent = parent
+        self.base_dir = base_dir
         if config:
             self.src = config["src"]
             self.dest = config["dest"]
@@ -86,7 +85,7 @@ class File:
             self.variables = variables
 
     def _setup_template(self) -> Template:
-        env = setup_template_env(self.parent)
+        env = setup_template_env(self.base_dir)
         env.filters.update(filters.collection)
         template = env.get_template(self.src)
         template.globals.update(functions.collection)
@@ -100,30 +99,63 @@ class File:
             for k, v in self.variables.items():
                 variables[k] = Replacement(v).get()
         rendered = template.render(**variables)
-        dest = self.parent / self.dest
+        dest = self.base_dir / self.dest
         dest.write_text(rendered)
         return rendered
 
 
-def patch_file(
-    parent: str, src: str, dest: str, variables: Optional[Variables] = None
-) -> str:
-    return File(parent=Path(parent), src=src, dest=dest, variables=variables).patch()
+class Project:
+    base_dir: Path
+
+    def __init__(self, base_dir: str | Path):
+        if isinstance(base_dir, str):
+            self.base_dir = Path(base_dir)
+        else:
+            self.base_dir = base_dir
+
+    @property
+    def pyproject_toml(self) -> Path:
+        return self.base_dir / "pyproject.toml"
+
+    @property
+    def has_pyproject_toml(self) -> bool:
+        return self.pyproject_toml.exists()
+
+    def patch_file(
+        self, src: str, dest: str, variables: Optional[Variables] = None
+    ) -> str:
+        return File(
+            base_dir=self.base_dir, src=src, dest=dest, variables=variables
+        ).patch()
+
+    def _patch_files_specified_in_toml(self, project: PyProject) -> None:
+        if not project.tool["readme_patcher"]:
+            raise Exception("No tools.readme_patcher section")
+        config = project.tool["readme_patcher"]
+
+        for file_config in config["file"]:
+            file = File(self.base_dir, file_config)
+            file.patch()
+
+    def _patch_default(self):
+        File(
+            base_dir=self.base_dir, src="README_template.rst", dest="README.rst"
+        ).patch()
+
+    def patch(self):
+        if self.has_pyproject_toml:
+            project = PyProject().load(self.pyproject_toml)
+            self._patch_files_specified_in_toml(project)
+        else:
+            self._patch_default()
 
 
-def patch():
+def main():
     pyproject_toml = search_for_pyproject_toml()
+    base_dir: str | Path
+    if pyproject_toml:
+        base_dir = pyproject_toml
+    else:
+        base_dir = os.getcwd()
 
-    if not pyproject_toml:
-        raise Exception("No pyproject.toml file found.")
-
-    project = PyProject().load(pyproject_toml)
-
-    if not project.tool["readme_patcher"]:
-        raise Exception("No tools.readme_patcher section")
-
-    config = project.tool["readme_patcher"]
-
-    for file_config in config["file"]:
-        file = File(pyproject_toml.parent, file_config)
-        file.patch()
+    Project(base_dir).patch()

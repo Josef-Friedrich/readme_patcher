@@ -3,7 +3,7 @@ import tempfile
 from typing import Optional
 import unittest
 
-from readme_patcher import patch_file, Variables
+from readme_patcher import Project, Variables
 
 
 FILES_DIR = os.path.join(os.path.dirname(__file__), "files")
@@ -20,7 +20,7 @@ def read_file_content(path: str):
 
 def patch(src: str, variables: Optional[Variables] = None) -> str:
     tmp = create_tmp_file()
-    patch_file(parent=FILES_DIR, src=src, dest=tmp, variables=variables)
+    Project(FILES_DIR).patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)
 
 
