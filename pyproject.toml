@@ -17,6 +17,7 @@ pyproject-parser = "^0.7.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "22.6.0"
+isort = "^5.10.1"
 
 [build-system]
 requires = ["poetry>=1.2.0b2"]
@@ -27,5 +28,5 @@ build-backend = "poetry.masonry.api"
 
 [[tool.readme_patcher.file]]
 src = "README_template.rst"
-dest = "README"
-vars = { cli_output = "lol" }
+dest = "README.rst"
+vars = { cli_output = "Patched in text" }

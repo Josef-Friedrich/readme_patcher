@@ -1,31 +1,64 @@
 import os
 import subprocess
-from typing import Dict
+from pathlib import Path
+from typing import Dict, Optional, TypedDict
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-
 from pyproject_parser import PyProject
 
-env = Environment(loader=FileSystemLoader(os.getcwd()), autoescape=select_autoescape())
+
+def setup_template_env(pwd: os.PathLike[str]) -> Environment:
+    return Environment(loader=FileSystemLoader(pwd), autoescape=select_autoescape())
 
 
+def search_for_pyproject_toml() -> Optional[Path]:
+    """
+    https://stackoverflow.com/a/68994012
+    """
+    directory = Path.cwd()
+    # /
+    root = Path(directory.root)
+    while directory != root:
+        attempt = directory / "pyproject.toml"
+        if attempt.exists():
+            return attempt
+        directory = directory.parent
+    return None
 
 
-# def get_path(*path_segments: str) -> str:
-#     return os.path.join(os.getcwd(), *path_segments)
+class Variable:
+    """A variable and this replacement text."""
+
+    ...
 
 
-# def read_file(path: str) -> str:
-#     file = open(path, 'r')
-#     content = file.read()
-#     file.close()
-#     return content
+class FileConfig(TypedDict):
+    src: str
+    dest: str
+    vars: Dict[str, str]
+    parent: Path
 
-class FileToPatch:
 
+class File:
+    """A file to patch."""
+
+    parent: Path
     src: str
     dest: str
     variables: Dict[str, str]
+
+    def __init__(self, parent: Path, config: FileConfig):
+        self.parent = parent
+        self.src = config["src"]
+        self.dest = config["dest"]
+        self.variables = config["vars"]
+
+    def patch(self):
+        env = setup_template_env(self.parent)
+        template = env.get_template(self.src)
+        rendered = template.render(**self.variables)
+        dest = self.parent / self.dest
+        dest.write_text(rendered)
 
 
 def read_cli_output(command: str) -> str:
@@ -34,10 +67,18 @@ def read_cli_output(command: str) -> str:
 
 
 def patch():
+    pyproject_toml = search_for_pyproject_toml()
 
-    project =  PyProject().load('pyproject.toml')
+    if not pyproject_toml:
+        raise Exception("No pyproject.toml file found.")
 
-    print(project.tool['readme_patcher'])
-    # content = read_file('README_template.rst')
-    template = env.get_template("README_template.rst")
-    print(template.render(cli_output="lol"))
+    project = PyProject().load(pyproject_toml)
+
+    if not project.tool["readme_patcher"]:
+        raise Exception("No tools.readme_patcher section")
+
+    config = project.tool["readme_patcher"]
+
+    for file_config in config["file"]:
+        file = File(pyproject_toml.parent, file_config)
+        file.patch()
