@@ -8,7 +8,8 @@ from pyproject_parser import PyProject
 from . import functions, filters
 
 
-def setup_template_env(pwd: os.PathLike[str]) -> Environment:
+def setup_template_env(pwd: "os.PathLike[str]") -> Environment:
+    """Quotes around os.PathLike[str] to get py38 compatibility."""
     return Environment(loader=FileSystemLoader(pwd), autoescape=select_autoescape())
 
 
