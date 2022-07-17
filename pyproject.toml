@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "readme_patcher"
+version = "0.1.0"
+description = "A collection of boilerplate files and templates for my Python projects."
+authors = ["Josef Friedrich <josef@friedrich.rocks>"]
+readme = "README.rst"
+repository = "https://github.com/Josef-Friedrich/readme_patcher"
+# https://spdx.org/licenses/
+license = "MIT" # GPL-3.0-only LGPL-2.1-only
+# https://pypi.org/classifiers/
+classifiers = [
+  "Private :: Do not Upload", # HTTP Error 400: Invalid value for classifiers. Error: Classifier 'Private :: Do not Upload' is not a valid classifier.
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3",
+  "Topic :: Utilities",
+  "License :: OSI Approved :: MIT License", # "License :: OSI Approved :: GNU General Public License v3 (GPLv3)", "License :: OSI Approved :: GNU Lesser General Public License v2 (LGPLv2)"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[build-system]
+requires = ["poetry>=1.2.0b2"]
+build-backend = "poetry.masonry.api"

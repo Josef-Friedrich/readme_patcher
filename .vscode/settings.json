@@ -1,0 +1,15 @@
+{
+  "files.exclude": {
+    "**/__pycache__/": true,
+    "**/*.py[cod]": true,
+    "**/dist/": true,
+    "**/MANIFEST": true,
+    "**/.tox/": true,
+    "**/nosetests.xml": true,
+    "**/.pytest_cache/": true,
+    "**/docs/_build/": true,
+    "**/doc/html/": true,
+    "**/.mypy_cache/": true
+  },
+  "esbonio.sphinx.confDir": ""
+}
