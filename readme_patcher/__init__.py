@@ -1,3 +1,4 @@
+import importlib
 import os
 import subprocess
 from pathlib import Path
@@ -26,10 +27,37 @@ def search_for_pyproject_toml() -> Optional[Path]:
     return None
 
 
-class Variable:
-    """A variable and this replacement text."""
+def read_cli_output(command: str) -> str:
+    result = subprocess.run(command, capture_output=True, text=True, shell=True)
+    return result.stdout + result.stderr
 
-    ...
+
+def read_func_output(function_spec: str) -> str:
+    module, func_name = function_spec.rsplit(".", 1)
+    func = getattr(importlib.import_module(module), func_name)
+    return func()
+
+
+template_functions = {"cli": read_cli_output, "func": read_func_output}
+
+
+class Replacement:
+    """A variable and its replacement text."""
+
+    raw: str
+
+    def __init__(self, raw: str):
+        self.raw = raw.strip()
+
+    def get(self) -> str:
+        output: str
+        if self.raw.startswith("cli:"):
+            output = read_cli_output(self.raw[4:].strip())
+        elif self.raw.startswith("func:"):
+            output = read_func_output(self.raw[5:].strip())
+        else:
+            output = self.raw
+        return str(output)
 
 
 class FileConfig(TypedDict):
@@ -56,14 +84,13 @@ class File:
     def patch(self):
         env = setup_template_env(self.parent)
         template = env.get_template(self.src)
-        rendered = template.render(**self.variables)
+        template.globals.update(template_functions)
+        variables: Dict[str, str] = {}
+        for k, v in self.variables.items():
+            variables[k] = Replacement(v).get()
+        rendered = template.render(**variables)
         dest = self.parent / self.dest
         dest.write_text(rendered)
-
-
-def read_cli_output(command: str) -> str:
-    result = subprocess.run(command, capture_output=True, text=True)
-    return result.stdout
 
 
 def patch():

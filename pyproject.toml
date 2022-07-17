@@ -29,4 +29,4 @@ build-backend = "poetry.masonry.api"
 [[tool.readme_patcher.file]]
 src = "README_template.rst"
 dest = "README.rst"
-vars = { cli_output = "Patched in text" }
+vars = { cli_output = "Patched in text", cwd = "func:os.getcwd", uname = "cli:fortune --help" }
