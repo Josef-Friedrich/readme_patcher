@@ -20,11 +20,11 @@ black = "22.6.0"
 isort = "^5.10.1"
 
 [build-system]
-requires = ["poetry>=1.2.0b2"]
+requires = ["poetry>=1.2.0b2", "setuptools", "setuptools-scm"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-"readme-patcher.py" = "readme_patcher:patch"
+"readme-patcher" = "readme_patcher:patch"
 
 [[tool.readme_patcher.file]]
 src = "README_template.rst"

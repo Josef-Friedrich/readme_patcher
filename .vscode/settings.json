@@ -12,5 +12,8 @@
     "**/.mypy_cache/": true
   },
   "esbonio.sphinx.confDir": "",
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.rulers": [79,80,88]
+  }
 }

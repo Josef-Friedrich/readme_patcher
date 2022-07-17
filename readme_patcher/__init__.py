@@ -1,11 +1,11 @@
-import importlib
 import os
-import subprocess
 from pathlib import Path
 from typing import Dict, Optional, TypedDict
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
+
+from . import functions, filters
 
 
 def setup_template_env(pwd: os.PathLike[str]) -> Environment:
@@ -27,20 +27,6 @@ def search_for_pyproject_toml() -> Optional[Path]:
     return None
 
 
-def read_cli_output(command: str) -> str:
-    result = subprocess.run(command, capture_output=True, text=True, shell=True)
-    return result.stdout + result.stderr
-
-
-def read_func_output(function_spec: str) -> str:
-    module, func_name = function_spec.rsplit(".", 1)
-    func = getattr(importlib.import_module(module), func_name)
-    return func()
-
-
-template_functions = {"cli": read_cli_output, "func": read_func_output}
-
-
 class Replacement:
     """A variable and its replacement text."""
 
@@ -52,9 +38,9 @@ class Replacement:
     def get(self) -> str:
         output: str
         if self.raw.startswith("cli:"):
-            output = read_cli_output(self.raw[4:].strip())
+            output = functions.read_cli_output(self.raw[4:].strip())
         elif self.raw.startswith("func:"):
-            output = read_func_output(self.raw[5:].strip())
+            output = functions.read_func_output(self.raw[5:].strip())
         else:
             output = self.raw
         return str(output)
@@ -63,8 +49,11 @@ class Replacement:
 class FileConfig(TypedDict):
     src: str
     dest: str
-    vars: Dict[str, str]
+    variables: Dict[str, str]
     parent: Path
+
+
+Variables = Dict[str, str]
 
 
 class File:
@@ -73,24 +62,52 @@ class File:
     parent: Path
     src: str
     dest: str
-    variables: Dict[str, str]
+    variables: Optional[Variables] = None
 
-    def __init__(self, parent: Path, config: FileConfig):
+    def __init__(
+        self,
+        parent: Path,
+        src: Optional[str] = None,
+        dest: Optional[str] = None,
+        variables: Optional[Variables] = None,
+        config: Optional[FileConfig] = None,
+    ):
         self.parent = parent
-        self.src = config["src"]
-        self.dest = config["dest"]
-        self.variables = config["vars"]
+        if config:
+            self.src = config["src"]
+            self.dest = config["dest"]
+            self.variables = config["variables"]
+        if src:
+            self.src = src
+        if dest:
+            self.dest = dest
+        if variables:
+            self.variables = variables
 
-    def patch(self):
+    def _setup_template(self) -> Template:
         env = setup_template_env(self.parent)
+        env.filters.update(filters.collection)
         template = env.get_template(self.src)
-        template.globals.update(template_functions)
+        template.globals.update(functions.collection)
+        return template
+
+    def patch(self) -> str:
+        template = self._setup_template()
+
         variables: Dict[str, str] = {}
-        for k, v in self.variables.items():
-            variables[k] = Replacement(v).get()
+        if self.variables:
+            for k, v in self.variables.items():
+                variables[k] = Replacement(v).get()
         rendered = template.render(**variables)
         dest = self.parent / self.dest
         dest.write_text(rendered)
+        return rendered
+
+
+def patch_file(
+    parent: str, src: str, dest: str, variables: Optional[Variables] = None
+) -> str:
+    return File(parent=Path(parent), src=src, dest=dest, variables=variables).patch()
 
 
 def patch():
