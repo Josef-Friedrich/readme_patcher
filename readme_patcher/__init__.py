@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Dict, Optional, TypedDict
+from typing import Any, Dict, Optional, TypedDict
 
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
@@ -123,6 +123,13 @@ class Project:
     def has_pyproject_toml(self) -> bool:
         return self.pyproject_toml.exists()
 
+    @property
+    def pyproject_config(self) -> Dict[str, Any] | None:
+        if self.has_pyproject_toml:
+            project = PyProject().load(self.pyproject_toml)
+            if "readme_patcher" in project.tool:
+                return project.tool["readme_patcher"]
+
     def patch_file(
         self, src: str, dest: str, variables: Optional[Variables] = None
     ) -> str:
@@ -130,11 +137,7 @@ class Project:
             base_dir=self.base_dir, src=src, dest=dest, variables=variables
         ).patch()
 
-    def _patch_files_specified_in_toml(self, project: PyProject) -> None:
-        if not project.tool["readme_patcher"]:
-            raise Exception("No tools.readme_patcher section")
-        config = project.tool["readme_patcher"]
-
+    def _patch_files_specified_in_toml(self, config: Dict[str, Any]) -> None:
         for file_config in config["file"]:
             file = File(self.base_dir, file_config)
             file.patch()
@@ -145,9 +148,9 @@ class Project:
         ).patch()
 
     def patch(self):
-        if self.has_pyproject_toml:
-            project = PyProject().load(self.pyproject_toml)
-            self._patch_files_specified_in_toml(project)
+        config = self.pyproject_config
+        if config:
+            self._patch_files_specified_in_toml(config)
         else:
             self._patch_default()
 
@@ -156,8 +159,10 @@ def main():
     pyproject_toml = search_for_pyproject_toml()
     base_dir: str | Path
     if pyproject_toml:
-        base_dir = pyproject_toml
+        base_dir = pyproject_toml.parent
     else:
         base_dir = os.getcwd()
+
+    print("Found project in {}".format(base_dir))
 
     Project(base_dir).patch()
