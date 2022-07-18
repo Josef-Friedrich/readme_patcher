@@ -14,19 +14,25 @@ cli: Combined output (stdout and stderr) of command line interfaces (scripts / b
 
 .. code-block:: jinja
 
-    {{ cli('awk --help') | code }}
+    {{ cli('awk --help') }}
 
 func: return values of Python functions
 
 .. code-block:: jinja
 
-    {{ func('os.getcwd') | code }}
+    {{ func('os.getcwd') }}
 
 
 Filters
 -------
 
 code
+
+.. code-block:: jinja
+
+    {{ func('os.getcwd') | code }}
+
+literal
 
 .. code-block:: jinja
 
