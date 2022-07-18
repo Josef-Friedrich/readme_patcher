@@ -160,4 +160,6 @@ def main():
     else:
         base_dir = os.getcwd()
 
+    print(base_dir)
+
     Project(base_dir).patch()
