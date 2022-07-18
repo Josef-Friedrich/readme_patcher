@@ -4,7 +4,7 @@ from typing import Optional
 
 from readme_patcher import Project, Variables
 
-FILES_DIR = os.path.join(os.path.dirname(__file__), "files")
+TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 
 
 def create_tmp_file():
@@ -18,5 +18,5 @@ def read_file_content(path: str):
 
 def patch(src: str, variables: Optional[Variables] = None) -> str:
     tmp = create_tmp_file()
-    Project(FILES_DIR).patch_file(src=src, dest=tmp, variables=variables)
+    Project(TEST_FILES_FOLDER).patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)

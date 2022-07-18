@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional, TypedDict
+from typing import Any, Dict, List, Optional, TypedDict
 
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
@@ -97,6 +97,8 @@ class File:
         env.filters.update(filters.collection)  # type: ignore
         template = env.get_template(self.src)
         template.globals.update(functions.collection)
+        if self.project.py_project:
+            template.globals.update(py_project=self.project.py_project)
         return template
 
     def patch(self) -> str:
@@ -112,6 +114,21 @@ class File:
         return rendered
 
 
+class SimplePyProject:
+
+    py_project: PyProject
+
+    """Contain the attributes of a pyproject.toml file that interest us"""
+
+    def __init__(self, py_project: PyProject):
+        self.py_project = py_project
+
+    @property
+    def repository(self) -> str | None:
+        if self.py_project.tool and self.py_project.tool["poetry"]["repository"]:
+            return self.py_project.tool["poetry"]["repository"]
+
+
 class Project:
     """A project corresponds to a code repository. In its root there is a
     README file."""
@@ -125,40 +142,44 @@ class Project:
             self.base_dir = base_dir
 
     @property
-    def py_project(self) -> PyProject | None:
+    def _py_project(self) -> PyProject | None:
         """"""
         path = self.base_dir / "pyproject.toml"
         if path.exists():
-            return PyProject().load(self.py_project)  # type: ignore
+            return PyProject().load(path)  # type: ignore
+
+    @property
+    def py_project(self) -> SimplePyProject | None:
+        py_project = self._py_project
+        if py_project:
+            return SimplePyProject(py_project)
 
     @property
     def py_project_config(self) -> Dict[str, Any] | None:
-        if self.py_project and "readme_patcher" in self.py_project.tool:
-            return self.py_project.tool["readme_patcher"]
+        if self._py_project and "readme_patcher" in self._py_project.tool:
+            return self._py_project.tool["readme_patcher"]
 
     def patch_file(
         self, src: str, dest: str, variables: Optional[Variables] = None
     ) -> str:
-        return File(
-            project=self, src=src, dest=dest, variables=variables
-        ).patch()
+        return File(project=self, src=src, dest=dest, variables=variables).patch()
 
-    def _patch_files_specified_in_toml(self, config: Dict[str, Any]) -> None:
+    def _patch_files_specified_in_toml(self, config: Dict[str, Any]) -> List[str]:
+        rendered: List[str] = []
         for file_config in config["file"]:
             file = File(project=self, config=file_config)
-            file.patch()
+            rendered.append(file.patch())
+        return rendered
 
-    def _patch_default(self):
-        File(
-            project=self, src="README_template.rst", dest="README.rst"
-        ).patch()
+    def _patch_default(self) -> str:
+        return File(project=self, src="README_template.rst", dest="README.rst").patch()
 
-    def patch(self):
+    def patch(self) -> List[str]:
         config = self.py_project_config
         if config:
-            self._patch_files_specified_in_toml(config)
+            return self._patch_files_specified_in_toml(config)
         else:
-            self._patch_default()
+            return [self._patch_default()]
 
 
 def main():
