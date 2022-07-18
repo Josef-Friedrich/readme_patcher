@@ -10,9 +10,15 @@ from pyproject_parser import PyProject
 from . import filters, functions
 
 
-def setup_template_env(pwd: "os.PathLike[str]") -> Environment:
-    """Quotes around os.PathLike[str] to get py38 compatibility."""
-    return Environment(loader=FileSystemLoader(pwd), autoescape=select_autoescape())
+def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
+    """
+    Setup the search paths for the template engine Jinja2. ``os.path.sep`` is
+    required to be able to include absolute paths, quotes around
+    ``os.PathLike[str]`` to get py38 compatibility."""
+    return Environment(
+        loader=FileSystemLoader([search_path, os.path.sep]),
+        autoescape=select_autoescape(),
+    )
 
 
 def search_for_pyproject_toml() -> Optional[Path]:

@@ -19,7 +19,9 @@ def wrap_in_code_block(content: str, language: str = "") -> str:
 
 
 def wrap_in_literal_block(content: str) -> str:
-    """https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#literal-blocks"""
+    """
+    https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#literal-blocks
+    """
     return "\n:: " + _indent_block(content)
 
 
