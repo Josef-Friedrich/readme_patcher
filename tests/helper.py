@@ -1,6 +1,5 @@
 import os
 import tempfile
-import unittest
 from typing import Optional
 
 from readme_patcher import Project, Variables
@@ -21,20 +20,3 @@ def patch(src: str, variables: Optional[Variables] = None) -> str:
     tmp = create_tmp_file()
     Project(FILES_DIR).patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)
-
-
-class ReadmePatcherTest(unittest.TestCase):
-    def test_function_cli(self):
-        self.assertEqual(patch("function_cli.rst"), "#output#")
-
-    def test_filter_code(self):
-        self.assertEqual(
-            patch("filter_code.rst", {"output": "code"}),
-            "#\n.. code-block:: \n\n    code\n\n#",
-        )
-
-    def test_filter_code_language(self):
-        self.assertEqual(
-            patch("filter_code_language.rst", {"output": "code"}),
-            "#\n.. code-block:: python\n\n    code\n\n#",
-        )
