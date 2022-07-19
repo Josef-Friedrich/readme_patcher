@@ -14,7 +14,7 @@ classifiers = [
 python = "^3.8"
 Jinja2 = "^3.1.2"
 pyproject-parser = "^0.7.0"
-requests = "^2.28.1"
+requests = "^2"
 
 [tool.poetry.group.dev.dependencies]
 black = "22.6.0"
