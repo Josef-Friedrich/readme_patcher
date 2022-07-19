@@ -4,6 +4,8 @@
 import importlib
 import re
 import subprocess
+from jinja2 import pass_context
+from jinja2.runtime import Context
 
 
 def read_cli_output(command: str, strip_whitespaces: bool = True) -> str:
@@ -22,4 +24,24 @@ def read_func_output(function_spec: str) -> str:
     return func()
 
 
-collection = {"cli": read_cli_output, "func": read_func_output}
+@pass_context
+def generate_github_workflow_badge(context: Context, workflow: str = "tests"):
+    github = context.get('github')
+    if not github:
+        raise Exception('No github repo found')
+    url = "https://github.com/{}/actions/workflows/{}.yml".format(
+        github.full_name, workflow
+    )
+
+    return (
+        ".. image:: {}/badge.svg\n".format(url)
+        + "    :target: {}\n".format(url)
+        + "    :alt: Tests"
+    )
+
+
+collection = {
+    "cli": read_cli_output,
+    "func": read_func_output,
+    "github_workflow_badge": generate_github_workflow_badge,
+}

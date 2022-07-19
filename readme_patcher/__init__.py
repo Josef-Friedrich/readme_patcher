@@ -1,4 +1,4 @@
-from __future__ import annotations
+from __future__ import annotations  # type: ignore
 
 import os
 from pathlib import Path
@@ -10,7 +10,7 @@ from pyproject_parser import PyProject
 
 from . import filters, functions
 from .github import Github
-
+from .badges import Badge
 import argparse
 
 
@@ -127,6 +127,8 @@ class File:
                     template.globals.update(github=github)
                 except Exception:
                     pass
+
+        template.globals.update(badge=Badge(self.project))
         return template
 
     def patch(self) -> str:
@@ -191,6 +193,11 @@ class Project:
     def py_project_config(self) -> Dict[str, Any] | None:
         if self._py_project and "readme_patcher" in self._py_project.tool:
             return self._py_project.tool["readme_patcher"]
+
+    @property
+    def github(self) -> Github | None:
+        if self.py_project and self.py_project.repository:
+            return Github(self.py_project.repository)
 
     def patch_file(
         self, src: str, dest: str, variables: Optional[Variables] = None

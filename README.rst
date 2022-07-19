@@ -35,6 +35,15 @@ github
     {{ github.full_name }}
     {{ github.description }}
 
+
+badge
+^^^^^
+
+.. code-block:: jinja
+
+    {{ badge.github_workflow('tests') }}
+
+
 Functions
 ---------
 
