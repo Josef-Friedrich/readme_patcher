@@ -32,6 +32,7 @@ def setup_argument_parser() -> Config:
 def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
     """
     Setup the search paths for the template engine Jinja2. ``os.path.sep`` is
+
     required to be able to include absolute paths, quotes around
     ``os.PathLike[str]`` to get py38 compatibility."""
     return Environment(
