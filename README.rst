@@ -18,7 +18,6 @@ py_project
 
     {{ py_project.repository }}
 
-
 github
 ^^^^^^
 
@@ -27,7 +26,6 @@ github
     {{ github.name }}
     {{ github.full_name }}
     {{ github.description }}
-
 
 Functions
 ---------
@@ -38,13 +36,11 @@ cli: Combined output (stdout and stderr) of command line interfaces (scripts / b
 
     {{ cli('awk --help') }}
 
-
 func: return values of Python functions
 
 .. code-block:: jinja
 
     {{ func('os.getcwd') }}
-
 
 Filters
 -------
@@ -55,13 +51,11 @@ code
 
     {{ func('os.getcwd') | code }}
 
-
 literal
 
 .. code-block:: jinja
 
     {{ func('os.getcwd') | code }}
-
 
 Configuration
 -------------

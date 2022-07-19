@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+import re
 from typing import Any, Dict, List, Optional, TypedDict
 
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
@@ -19,6 +20,7 @@ def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
     return Environment(
         loader=FileSystemLoader([search_path, os.path.sep]),
         autoescape=select_autoescape(),
+        keep_trailing_newline=True,
     )
 
 
@@ -100,7 +102,6 @@ class File:
         template.globals.update(functions.collection)
         if self.project.py_project:
             template.globals.update(py_project=self.project.py_project)
-
             if self.project.py_project.repository:
                 try:
                     github = Github(self.project.py_project.repository)
@@ -111,12 +112,13 @@ class File:
 
     def patch(self) -> str:
         template = self._setup_template()
-
         variables: Dict[str, str] = {}
         if self.variables:
             for k, v in self.variables.items():
                 variables[k] = Replacement(v).get()
         rendered = template.render(**variables)
+        # Remove multiple newlines
+        rendered = re.sub(r"\n\s*\n", "\n\n", rendered)
         dest = self.project.base_dir / self.dest
         dest.write_text(rendered)
         return rendered
