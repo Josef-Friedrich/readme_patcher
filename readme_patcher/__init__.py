@@ -10,7 +10,7 @@ from pyproject_parser import PyProject
 
 from . import filters, functions
 from .github import Github
-from .badges import Badge
+from .badge import Badge
 import argparse
 
 
@@ -150,13 +150,22 @@ class File:
 
 
 class SimplePyProject:
+    """Contain the attributes of a pyproject.toml file that interest us"""
 
     py_project: PyProject
 
-    """Contain the attributes of a pyproject.toml file that interest us"""
-
     def __init__(self, py_project: PyProject):
         self.py_project = py_project
+
+    @property
+    def name(self) -> str | None:
+        if self.py_project.tool and self.py_project.tool["poetry"]["name"]:
+            return self.py_project.tool["poetry"]["name"]
+
+    @property
+    def name_normalized(self):
+        if self.name:
+            return re.sub(r"[-_.]+", "-", self.name).lower()
 
     @property
     def repository(self) -> str | None:

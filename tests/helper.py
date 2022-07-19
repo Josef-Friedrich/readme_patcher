@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import tempfile
 from typing import Optional
 
@@ -20,3 +21,7 @@ def patch(src: str, variables: Optional[Variables] = None) -> str:
     tmp = create_tmp_file()
     Project(TEST_FILES_FOLDER).patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)
+
+
+def get_project() -> Project:
+    return Project(Path(TEST_FILES_FOLDER) / "project")
