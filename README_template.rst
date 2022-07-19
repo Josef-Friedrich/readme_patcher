@@ -7,6 +7,14 @@ readme_patcher
 
 {{ github.description | wordwrap }}
 
+:: code-block:: shell
+
+    cd your-project
+    vim README_template.rst
+    poetry add --group dev readme-patcher
+    poetry shell
+    readme-patcher # README.rst
+
 Global objects
 --------------
 

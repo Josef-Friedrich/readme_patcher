@@ -8,6 +8,14 @@ readme_patcher
 Generate README files from templates. Allow input from functions calls and cli
 output.
 
+:: code-block:: shell
+
+    cd your-project
+    vim README_template.rst
+    poetry add --group dev readme-patcher
+    poetry shell
+    readme-patcher # README.rst
+
 Global objects
 --------------
 
