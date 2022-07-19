@@ -11,9 +11,21 @@ Generate README files from templates. Allow input from functions calls and cli o
 Global objects
 --------------
 
+py_project
+^^^^^^^^^^
+
 .. code-block:: jinja
 
     {{ py_project.repository }}
+
+github
+^^^^^^
+
+.. code-block:: jinja
+
+    {{ github.name }}
+    {{ github.full_name }}
+    {{ github.description }}
 
 Functions
 ---------

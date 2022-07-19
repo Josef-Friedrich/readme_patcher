@@ -389,7 +389,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "298df198ea9a3d8fc1ff0e2d00888c5f6ca20fc4f8c3b07de570c4628876330b"
+content-hash = "0ce3053d3466cdb90326842a8345d2175e723f6311c5ef6e9574e03963e54db8"
 
 [metadata.files]
 apeye = []

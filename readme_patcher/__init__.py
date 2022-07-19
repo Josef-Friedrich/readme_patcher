@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
 
 from . import filters, functions
+from .github import Github
 
 
 def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
@@ -99,6 +100,13 @@ class File:
         template.globals.update(functions.collection)
         if self.project.py_project:
             template.globals.update(py_project=self.project.py_project)
+
+            if self.project.py_project.repository:
+                try:
+                    github = Github(self.project.py_project.repository)
+                    template.globals.update(github=github)
+                except Exception:
+                    pass
         return template
 
     def patch(self) -> str:
