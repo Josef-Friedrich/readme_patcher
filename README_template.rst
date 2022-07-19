@@ -7,7 +7,7 @@ readme_patcher
 
 {{ github.description | wordwrap }}
 
-:: code-block:: shell
+.. code-block:: shell
 
     cd your-project
     vim README_template.rst

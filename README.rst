@@ -8,7 +8,7 @@ readme_patcher
 Generate README files from templates. Allow input from functions calls and cli
 output.
 
-:: code-block:: shell
+.. code-block:: shell
 
     cd your-project
     vim README_template.rst

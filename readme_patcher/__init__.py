@@ -61,7 +61,7 @@ class Replacement:
 class FileConfig(TypedDict):
     src: str
     dest: str
-    variables: Dict[str, str]
+    variables: Optional[Dict[str, str]]
 
 
 Variables = Dict[str, str]
@@ -87,7 +87,8 @@ class File:
         if config:
             self.src = config["src"]
             self.dest = config["dest"]
-            self.variables = config["variables"]
+            if "variables" in config:
+                self.variables = config["variables"]
         if src:
             self.src = src
         if dest:
