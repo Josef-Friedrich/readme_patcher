@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "readme_patcher"
-version = "0.1.0"
+version = "0.2.0"
 description = "Generate README files from templates. Allow input from functions calls and cli output."
 authors = ["Josef Friedrich <josef@friedrich.rocks>"]
 readme = "README.rst"
