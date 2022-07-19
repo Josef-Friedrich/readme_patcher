@@ -2,13 +2,18 @@
 
 
 import importlib
+import re
 import subprocess
 
 
-def read_cli_output(command: str) -> str:
+def read_cli_output(command: str, strip_whitespaces: bool = True) -> str:
     result = subprocess.run(command, capture_output=True, text=True, shell=True)
     output = result.stdout + result.stderr
-    return output.strip()
+    # clean ansi codes
+    output = re.sub(r"\x1b.*?m", "", output)
+    if strip_whitespaces:
+        output = output.strip()
+    return output
 
 
 def read_func_output(function_spec: str) -> str:
