@@ -13,5 +13,5 @@ class ClassProjectTest(unittest.TestCase):
         rendered = project.patch()
         self.assertEqual(
             rendered[0],
-            "README\n======\n\nhttps://github.com/Josef-Friedrich/readme_patcher",
+            "README\n======\n\nhttps://github.com/Josef-Friedrich/readme_patcher\n",
         )
