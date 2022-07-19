@@ -3,13 +3,30 @@ from __future__ import annotations
 import os
 from pathlib import Path
 import re
-from typing import Any, Dict, List, Optional, TypedDict
+from typing import Any, Dict, List, Optional, TypedDict, cast
 
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from pyproject_parser import PyProject
 
 from . import filters, functions
 from .github import Github
+
+import argparse
+
+
+class Config:
+    verbosity: int = 0
+
+
+config = Config()
+
+
+def setup_argument_parser() -> Config:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "-v", "--verbosity", action="count", help="increase output verbosity"
+    )
+    return cast(Config, parser.parse_args())
 
 
 def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
@@ -112,6 +129,8 @@ class File:
         return template
 
     def patch(self) -> str:
+        if config.verbosity > 0:
+            print("Patch file dest: {} src: {}".format(self.src, self.dest))
         template = self._setup_template()
         variables: Dict[str, str] = {}
         if self.variables:
@@ -120,6 +139,8 @@ class File:
         rendered = template.render(**variables)
         # Remove multiple newlines
         rendered = re.sub(r"\n\s*\n", "\n\n", rendered)
+        if config.verbosity > 1:
+            print(rendered)
         dest = self.project.base_dir / self.dest
         dest.write_text(rendered)
         return rendered
@@ -194,6 +215,8 @@ class Project:
 
 
 def main():
+    global config
+    config = setup_argument_parser()
     pyproject_toml = search_for_pyproject_toml()
     base_dir: str | Path
     if pyproject_toml:
@@ -201,6 +224,7 @@ def main():
     else:
         base_dir = os.getcwd()
 
-    print("Found project in {}".format(base_dir))
+    if config.verbosity > 0:
+        print("Found project in {}".format(base_dir))
 
     Project(base_dir).patch()
