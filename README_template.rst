@@ -5,8 +5,7 @@
 readme_patcher
 ==============
 
-Generate README files from templates. Allow input from functions calls and cli
-output.
+{{ github.description | wordwrap }}
 
 Global objects
 --------------
@@ -15,19 +14,19 @@ py_project
 ^^^^^^^^^^
 
 .. code-block:: jinja
-
+{% raw %}
     {{ py_project.repository }}
-
+{% endraw %}
 
 github
 ^^^^^^
 
 .. code-block:: jinja
-
+{% raw %}
     {{ github.name }}
     {{ github.full_name }}
     {{ github.description }}
-
+{% endraw %}
 
 Functions
 ---------
@@ -35,16 +34,16 @@ Functions
 cli: Combined output (stdout and stderr) of command line interfaces (scripts / binaries)
 
 .. code-block:: jinja
-
+{% raw %}
     {{ cli('awk --help') }}
-
+{% endraw %}
 
 func: return values of Python functions
 
 .. code-block:: jinja
-
+{% raw %}
     {{ func('os.getcwd') }}
-
+{% endraw %}
 
 Filters
 -------
@@ -52,16 +51,16 @@ Filters
 code
 
 .. code-block:: jinja
-
+{% raw %}
     {{ func('os.getcwd') | code }}
-
+{% endraw %}
 
 literal
 
 .. code-block:: jinja
-
+{% raw %}
     {{ func('os.getcwd') | code }}
-
+{% endraw %}
 
 Configuration
 -------------
