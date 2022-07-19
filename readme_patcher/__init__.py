@@ -24,7 +24,7 @@ config = Config()
 def setup_argument_parser() -> Config:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-v", "--verbosity", action="count", help="increase output verbosity"
+        "-v", "--verbosity", action="count", default=0, help="increase output verbosity"
     )
     return cast(Config, parser.parse_args())
 
