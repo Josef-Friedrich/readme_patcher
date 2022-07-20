@@ -6,8 +6,7 @@ from typing import Dict, Optional, TypedDict
 
 from jinja2 import Template
 
-from . import functions
-from .config import args
+from . import functions, config
 
 if typing.TYPE_CHECKING:
     from .project import Project
@@ -81,14 +80,14 @@ class File:
         return template  #
 
     def patch(self) -> str:
-        if args.verbosity > 0:
+        if config.args.verbosity > 0:
             print("Patch file dest: {} src: {}".format(self.src, self.dest))
         template = self._setup_template()
 
         rendered = template.render()
         # Remove multiple newlines
         rendered = re.sub(r"\n\s*\n", "\n\n", rendered)
-        if args.verbosity > 1:
+        if config.args.verbosity > 1:
             print(rendered)
         dest = self.project.base_dir / self.dest
         dest.write_text(rendered)

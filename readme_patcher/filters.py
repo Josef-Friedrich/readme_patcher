@@ -32,6 +32,9 @@ def wrap_in_literal_block(content: str, strip_whitespace: bool = True) -> str:
 
 
 def heading(content: str, level: int = 1) -> str:
+    """
+    https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections
+    """
     length = len(content)
     # markdown:
     # print('\n' + ('#' * level) + ' ' + content + '\n')
