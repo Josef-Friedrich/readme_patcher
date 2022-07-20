@@ -5,7 +5,7 @@ from typing import Optional
 
 if typing.TYPE_CHECKING:
     from . import Project, SimplePyProject
-    from readme_patcher.github import Github
+    from .github import Github
 
 
 class Badge:
@@ -33,6 +33,7 @@ class Badge:
             markup += "    :alt: {}\n".format(alt)
         return markup
 
+    @cached_property
     def pypi(self) -> str:
         return self._linked_image(
             "http://img.shields.io/pypi/v/{}.svg".format(
@@ -50,6 +51,7 @@ class Badge:
         )
         return self._linked_image(url + "/badge.svg", url, alt)
 
+    @cached_property
     def readthedocs(self) -> str:
         return self._linked_image(
             "https://readthedocs.org/projects/{}/badge/?version=latest".format(

@@ -1,1 +1,1 @@
-#{{ badge.pypi() }}#
+#{{ badge.readthedocs }}#

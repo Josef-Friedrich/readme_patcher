@@ -1,4 +1,4 @@
-#.. image:: http://img.shields.io/pypi/v/readme-patcher.svg
-    :target: https://pypi.org/project/readme-patcher
-    :alt: This package on the Python Package Index
+#.. image:: https://readthedocs.org/projects/readme-patcher/badge/?version=latest
+    :target: https://readme-patcher.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 #

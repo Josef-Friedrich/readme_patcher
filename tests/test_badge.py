@@ -10,9 +10,8 @@ class BadgeTest(unittest.TestCase):
             src="badge/{}_template.rst".format(basename),
             dest="badge/{}_tmp.rst".format(basename),
         )
-        expected_rel_path = "project/badge/{}.rst".format(basename)
-        expected = read_file_content(expected_rel_path)
-        os.remove(get_path(expected_rel_path))
+        expected = read_file_content("project/badge/{}.rst".format(basename))
+        os.remove(get_path("project/badge/{}_tmp.rst".format(basename)))
         self.assertEqual(rendered, expected)
 
     def test_pypi(self):

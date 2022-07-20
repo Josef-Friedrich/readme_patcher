@@ -36,6 +36,17 @@ github
     {{ github.description }}
 {% endraw %}
 
+
+badge
+^^^^^
+
+.. code-block:: jinja
+{% raw %}
+    {{ badge.github_workflow('tests' 'Tests') }}
+    {{ badge.pypi }}
+    {{ badge.readthedocs }}
+{% endraw %}
+
 Functions
 ---------
 
