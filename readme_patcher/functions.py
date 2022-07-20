@@ -1,4 +1,5 @@
 from __future__ import annotations
+import os
 
 """https://jinja.palletsprojects.com/en/3.1.x/api/#custom-filters"""
 
@@ -28,23 +29,14 @@ def read_func_output(function_spec: str) -> str:
 
 
 @pass_context
-def generate_github_workflow_badge(context: Context, workflow: str = "tests"):
-    github = context.get('github')
-    if not github:
-        raise Exception('No github repo found')
-    url = "https://github.com/{}/actions/workflows/{}.yml".format(
-        github.full_name, workflow
-    )
-
-    return (
-        ".. image:: {}/badge.svg\n".format(url)
-        + "    :target: {}\n".format(url)
-        + "    :alt: Tests"
-    )
+def read_file_content(context: Context, path: str) -> str:
+    project = context.get("project")
+    file = open(os.path.join(project.base_dir, path), "r")
+    return file.read()
 
 
 collection = {
     "cli": read_cli_output,
     "func": read_func_output,
-    "github_workflow_badge": generate_github_workflow_badge,
+    "read": read_file_content,
 }

@@ -26,6 +26,7 @@ def setup_environment(project: 'Project') -> Environment:
     environment.filters.update(filters.collection)
 
     environment.globals.update(functions.collection)
+    environment.globals.update(project=project)
     if project.py_project:
         environment.globals.update(py_project=project.py_project)
         if project.py_project.repository:

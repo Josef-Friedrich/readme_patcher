@@ -63,6 +63,12 @@ func: return values of Python functions
 
     {{ func('os.getcwd') }}
 
+read: read text files
+
+.. code-block:: jinja
+
+    {{ read('code/example.py') | code('python') }}
+
 Filters
 -------
 
@@ -70,13 +76,13 @@ code
 
 .. code-block:: jinja
 
-    {{ 'print("true")' | code('python') }}
+    {{ 'print("example")' | code('python') }}
 
 ::
 
     .. code-block:: python
 
-        print("true")
+        print("example")
 
 literal
 

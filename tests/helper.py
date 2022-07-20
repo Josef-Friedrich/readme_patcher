@@ -9,8 +9,8 @@ from readme_patcher.file import Variables
 TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 
 
-def create_tmp_file() -> str:
-    return os.path.join(tempfile.mkdtemp(), os.path.basename("README.rst"))
+def get_tmp_file_path() -> str:
+    return os.path.join(tempfile.mkdtemp(), "README.rst")
 
 
 def get_path(rel_path: str) -> str:
@@ -23,7 +23,7 @@ def read_file_content(rel_path: str) -> str:
 
 
 def patch(src: str, variables: Optional[Variables] = None) -> str:
-    tmp = create_tmp_file()
+    tmp = get_tmp_file_path()
     Project(TEST_FILES_FOLDER).patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)
 
