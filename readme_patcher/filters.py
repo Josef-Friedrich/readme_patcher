@@ -31,4 +31,25 @@ def wrap_in_literal_block(content: str, strip_whitespace: bool = True) -> str:
     return "\n:: " + _indent_block(content, strip_whitespace)
 
 
-collection = {"code": wrap_in_code_block, "literal": wrap_in_literal_block}
+def heading(content: str, level: int = 1) -> str:
+    length = len(content)
+    # markdown:
+    # print('\n' + ('#' * level) + ' ' + content + '\n')
+    if level == 1:
+        underline = "="
+    elif level == 2:
+        underline = "-"
+    elif level == 3:
+        underline = "^"
+    elif level == 4:
+        underline = '"'
+    else:
+        underline = "-"
+    return "\n" + content + "\n" + (underline * length) + "\n"
+
+
+collection = {
+    "code": wrap_in_code_block,
+    "literal": wrap_in_literal_block,
+    "heading": heading,
+}

@@ -73,6 +73,7 @@ Filters
 -------
 
 code
+^^^^
 
 .. code-block:: jinja
 
@@ -85,6 +86,7 @@ code
         print("example")
 
 literal
+^^^^^^^
 
 .. code-block:: jinja
 
@@ -95,6 +97,54 @@ literal
     ::
 
         /home/repos/project
+
+heading
+^^^^^^^
+
+.. code-block:: jinja
+
+    {{ 'heading 1' | heading(1) }}
+
+    {{ 'heading 2' | heading(2) }}
+
+    {{ 'heading 3' | heading(3) }}
+
+    {{ 'heading 4' | heading(4) }}
+
+::
+
+    heading 1
+    =========
+
+    heading 2
+    ---------
+
+    heading 3
+    ^^^^^^^^^
+
+    heading 4
+    """""""""
+
+Examples
+--------
+
+.. code-block:: jinja
+
+    {% for command in [
+                      'dns-ipv6-prefix.py',
+                      'extract-pdftext.py',
+                      'find-dupes-by-size.py',
+                      'list-files.py',
+                      'mac-to-eui64.py',
+                      'pdf-compress.py',
+                      'image-into-pdf.py'
+                      ]
+    %}
+
+    ``{{ command }}``
+
+    {{ cli('{} --help'.format(command)) | literal }}
+    {% endfor %}
 
 Configuration
 -------------

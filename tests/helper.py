@@ -22,9 +22,12 @@ def read_file_content(rel_path: str) -> str:
     return file.read()
 
 
+project_test_files_folder = Project(TEST_FILES_FOLDER)
+
+
 def patch(src: str, variables: Optional[Variables] = None) -> str:
     tmp = get_tmp_file_path()
-    Project(TEST_FILES_FOLDER).patch_file(src=src, dest=tmp, variables=variables)
+    project_test_files_folder.patch_file(src=src, dest=tmp, variables=variables)
     return read_file_content(tmp)
 
 

@@ -21,3 +21,9 @@ class FiltersTest(unittest.TestCase):
             patch("filters/literal.rst", {"output": "code"}),
             "#\n:: \n\n    code\n\n#\n",
         )
+
+    def test_heading(self):
+        self.assertEqual(
+            patch("filters/heading.rst"),
+            "#\nheading\n=======\n#\n",
+        )
