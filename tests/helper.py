@@ -8,12 +8,16 @@ from readme_patcher import Project, Variables
 TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 
 
-def create_tmp_file():
+def create_tmp_file() -> str:
     return os.path.join(tempfile.mkdtemp(), os.path.basename("README.rst"))
 
 
-def read_file_content(path: str):
-    file = open(path, "r")
+def get_path(rel_path: str) -> str:
+    return os.path.join(TEST_FILES_FOLDER, rel_path)
+
+
+def read_file_content(rel_path: str) -> str:
+    file = open(get_path(rel_path), "r")
     return file.read()
 
 
@@ -23,5 +27,6 @@ def patch(src: str, variables: Optional[Variables] = None) -> str:
     return read_file_content(tmp)
 
 
-def get_project() -> Project:
-    return Project(Path(TEST_FILES_FOLDER) / "project")
+# To avoid Github API limits: Client Error: rate limit exceeded for url
+# rate limit exceeded for url
+project = Project(Path(TEST_FILES_FOLDER) / "project")

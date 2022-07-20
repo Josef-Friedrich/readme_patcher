@@ -11,9 +11,9 @@ class Github:
         match = re.match(".*github\\.com/([^/]*/[^/]*).*", url)
         if not match:
             raise Exception("Wrong github URL.")
-        self.response = requests.get(
-            "https://api.github.com/repos/{}".format(match[1])
-        ).json()
+        response = requests.get("https://api.github.com/repos/{}".format(match[1]))
+        response.raise_for_status()
+        self.response = response.json()
 
     @property
     def name(self) -> str:

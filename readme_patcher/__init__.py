@@ -1,4 +1,5 @@
-from __future__ import annotations  # type: ignore
+from __future__ import annotations
+from functools import cached_property  # type: ignore
 
 import os
 from pathlib import Path
@@ -157,17 +158,17 @@ class SimplePyProject:
     def __init__(self, py_project: PyProject):
         self.py_project = py_project
 
-    @property
+    @cached_property
     def name(self) -> str | None:
         if self.py_project.tool and self.py_project.tool["poetry"]["name"]:
             return self.py_project.tool["poetry"]["name"]
 
-    @property
+    @cached_property
     def name_normalized(self):
         if self.name:
             return re.sub(r"[-_.]+", "-", self.name).lower()
 
-    @property
+    @cached_property
     def repository(self) -> str | None:
         if self.py_project.tool and self.py_project.tool["poetry"]["repository"]:
             return self.py_project.tool["poetry"]["repository"]
@@ -185,25 +186,25 @@ class Project:
         else:
             self.base_dir = base_dir
 
-    @property
+    @cached_property
     def _py_project(self) -> PyProject | None:
         """"""
         path = self.base_dir / "pyproject.toml"
         if path.exists():
             return PyProject().load(path)  # type: ignore
 
-    @property
+    @cached_property
     def py_project(self) -> SimplePyProject | None:
         py_project = self._py_project
         if py_project:
             return SimplePyProject(py_project)
 
-    @property
+    @cached_property
     def py_project_config(self) -> Dict[str, Any] | None:
         if self._py_project and "readme_patcher" in self._py_project.tool:
             return self._py_project.tool["readme_patcher"]
 
-    @property
+    @cached_property
     def github(self) -> Github | None:
         if self.py_project and self.py_project.repository:
             return Github(self.py_project.repository)

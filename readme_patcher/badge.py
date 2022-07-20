@@ -1,8 +1,11 @@
+from functools import cached_property
 import typing
 from typing import Optional
 
+
 if typing.TYPE_CHECKING:
-    from . import Project
+    from . import Project, SimplePyProject
+    from readme_patcher.github import Github
 
 
 class Badge:
@@ -12,27 +15,48 @@ class Badge:
     def __init__(self, project: "Project"):
         self.project = project
 
-    def _linked_image(self, image: str, link: str, alt: Optional[str] = None):
+    @cached_property
+    def _github(self) -> "Github":
+        if not self.project.github:
+            raise Exception("No github repo found")
+        return self.project.github
+
+    @cached_property
+    def _py_project(self) -> "SimplePyProject":
+        if not self.project.py_project:
+            raise Exception("No pyproject.toml")
+        return self.project.py_project
+
+    def _linked_image(self, image: str, link: str, alt: Optional[str] = None) -> str:
         markup = ".. image:: {}\n".format(image) + "    :target: {}\n".format(link)
         if alt:
             markup += "    :alt: {}\n".format(alt)
         return markup
 
-    def pypi(self):
-        py_project = self.project.py_project
-        if not py_project:
-            raise Exception("No pyproject.toml")
+    def pypi(self) -> str:
         return self._linked_image(
-            "http://img.shields.io/pypi/v/{}.svg".format(py_project.name_normalized),
-            "https://pypi.org/project/{}".format(py_project.name_normalized),
+            "http://img.shields.io/pypi/v/{}.svg".format(
+                self._py_project.name_normalized
+            ),
+            "https://pypi.org/project/{}".format(self._py_project.name_normalized),
             "This package on the Python Package Index",
         )
 
-    def github_workflow(self, workflow: str = "tests", alt: Optional[str] = None):
-        github = self.project.github
-        if not github:
-            raise Exception("No github repo found")
+    def github_workflow(
+        self, workflow: str = "tests", alt: Optional[str] = None
+    ) -> str:
         url = "https://github.com/{}/actions/workflows/{}.yml".format(
-            github.full_name, workflow
+            self._github.full_name, workflow
         )
         return self._linked_image(url + "/badge.svg", url, alt)
+
+    def readthedocs(self) -> str:
+        return self._linked_image(
+            "https://readthedocs.org/projects/{}/badge/?version=latest".format(
+                self._py_project.name_normalized
+            ),
+            "https://{}.readthedocs.io/en/latest/?badge=latest".format(
+                self._py_project.name_normalized
+            ),
+            "Documentation Status",
+        )
