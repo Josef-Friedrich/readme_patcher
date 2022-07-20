@@ -1,6 +1,6 @@
-.. image:: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml/badge.svg
-    :target: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml
-    :alt: Tests
+{{ badge.pypi }}
+
+{{ badge.github_workflow() }}
 
 readme_patcher
 ==============
@@ -42,8 +42,8 @@ badge
 
 .. code-block:: jinja
 {% raw %}
-    {{ badge.github_workflow('tests' 'Tests') }}
     {{ badge.pypi }}
+    {{ badge.github_workflow('tests' 'Tests') }}
     {{ badge.readthedocs }}
 {% endraw %}
 

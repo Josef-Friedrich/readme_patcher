@@ -1,6 +1,9 @@
+.. image:: http://img.shields.io/pypi/v/readme-patcher.svg
+    :target: https://pypi.org/project/readme-patcher
+    :alt: This package on the Python Package Index
+
 .. image:: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml/badge.svg
     :target: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml
-    :alt: Tests
 
 readme_patcher
 ==============
@@ -35,14 +38,14 @@ github
     {{ github.full_name }}
     {{ github.description }}
 
-
 badge
 ^^^^^
 
 .. code-block:: jinja
 
-    {{ badge.github_workflow('tests') }}
-
+    {{ badge.github_workflow('tests' 'Tests') }}
+    {{ badge.pypi }}
+    {{ badge.readthedocs }}
 
 Functions
 ---------
