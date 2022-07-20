@@ -3,8 +3,11 @@ from __future__ import annotations
 from functools import cached_property
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from jinja2 import Environment
 
 from pyproject_parser import PyProject
+
+from readme_patcher.template import setup_environment
 
 from .file import File, Variables
 from .github import Github
@@ -25,26 +28,29 @@ class Project:
 
     @cached_property
     def _py_project(self) -> PyProject | None:
-        """"""
         path = self.base_dir / "pyproject.toml"
         if path.exists():
             return PyProject().load(path)  # type: ignore
+        return None
 
     @cached_property
     def py_project(self) -> SimplePyProject | None:
         py_project = self._py_project
         if py_project:
             return SimplePyProject(py_project)
+        return None
 
     @cached_property
     def py_project_config(self) -> Dict[str, Any] | None:
         if self._py_project and "readme_patcher" in self._py_project.tool:
             return self._py_project.tool["readme_patcher"]
+        return None
 
     @cached_property
     def github(self) -> Github | None:
         if self.py_project and self.py_project.repository:
             return Github(self.py_project.repository)
+        return None
 
     def patch_file(
         self, src: str, dest: str, variables: Optional[Variables] = None
@@ -57,6 +63,10 @@ class Project:
             file = File(project=self, config=file_config)
             rendered.append(file.patch())
         return rendered
+
+    @cached_property
+    def template_env(self) -> Environment:
+        return setup_environment(self)
 
     def _patch_default(self) -> str:
         return File(project=self, src="README_template.rst", dest="README.rst").patch()

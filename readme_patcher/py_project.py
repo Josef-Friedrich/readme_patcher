@@ -18,13 +18,16 @@ class SimplePyProject:
     def name(self) -> str | None:
         if self.py_project.tool and self.py_project.tool["poetry"]["name"]:
             return self.py_project.tool["poetry"]["name"]
+        return None
 
     @cached_property
-    def name_normalized(self):
+    def name_normalized(self) -> str | None:
         if self.name:
             return re.sub(r"[-_.]+", "-", self.name).lower()
+        return None
 
     @cached_property
     def repository(self) -> str | None:
         if self.py_project.tool and self.py_project.tool["poetry"]["repository"]:
             return self.py_project.tool["poetry"]["repository"]
+        return None
