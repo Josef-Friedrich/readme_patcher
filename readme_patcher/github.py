@@ -1,6 +1,7 @@
-from typing import Any
-import requests
 import re
+from typing import Any
+
+import requests
 
 
 class Github:

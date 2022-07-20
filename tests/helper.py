@@ -1,9 +1,10 @@
 import os
-from pathlib import Path
 import tempfile
+from pathlib import Path
 from typing import Optional
 
-from readme_patcher import Project, Variables
+from readme_patcher import Project
+from readme_patcher.file import Variables
 
 TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 

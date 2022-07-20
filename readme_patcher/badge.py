@@ -1,11 +1,11 @@
-from functools import cached_property
 import typing
+from functools import cached_property
 from typing import Optional
 
-
 if typing.TYPE_CHECKING:
-    from . import Project, SimplePyProject
     from .github import Github
+    from .project import Project
+    from .py_project import SimplePyProject
 
 
 class Badge:
@@ -44,7 +44,7 @@ class Badge:
         )
 
     def github_workflow(
-        self, workflow: str = "tests", alt: Optional[str] = 'Tests'
+        self, workflow: str = "tests", alt: Optional[str] = "Tests"
     ) -> str:
         url = "https://github.com/{}/actions/workflows/{}.yml".format(
             self._github.full_name, workflow

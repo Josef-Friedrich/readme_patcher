@@ -1,46 +1,13 @@
 from __future__ import annotations
-from functools import cached_property  # type: ignore
 
 import os
 from pathlib import Path
-import re
-from typing import Any, Dict, List, Optional, TypedDict, cast
+from typing import Optional
 
-from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
-from pyproject_parser import PyProject
+from readme_patcher.project import Project
 
-from . import filters, functions
-from .github import Github
-from .badge import Badge
-import argparse
-
-
-class Config:
-    verbosity: int = 0
-
-
-config = Config()
-
-
-def setup_argument_parser() -> Config:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-v", "--verbosity", action="count", default=0, help="increase output verbosity"
-    )
-    return cast(Config, parser.parse_args())
-
-
-def setup_template_env(search_path: "os.PathLike[str]") -> Environment:
-    """
-    Setup the search paths for the template engine Jinja2. ``os.path.sep`` is
-
-    required to be able to include absolute paths, quotes around
-    ``os.PathLike[str]`` to get py38 compatibility."""
-    return Environment(
-        loader=FileSystemLoader([search_path, os.path.sep]),
-        autoescape=select_autoescape(),
-        keep_trailing_newline=True,
-    )
+from . import config
+from .config import setup_argument_parser
 
 
 def search_for_pyproject_toml() -> Optional[Path]:
@@ -58,183 +25,8 @@ def search_for_pyproject_toml() -> Optional[Path]:
     return None
 
 
-class Replacement:
-    """A variable and its replacement text."""
-
-    raw: str
-
-    def __init__(self, raw: str):
-        self.raw = raw.strip()
-
-    def get(self) -> str:
-        output: str
-        if self.raw.startswith("cli:"):
-            output = functions.read_cli_output(self.raw[4:].strip())
-        elif self.raw.startswith("func:"):
-            output = functions.read_func_output(self.raw[5:].strip())
-        else:
-            output = self.raw
-        return str(output)
-
-
-class FileConfig(TypedDict):
-    src: str
-    dest: str
-    variables: Optional[Dict[str, str]]
-
-
-Variables = Dict[str, str]
-
-
-class File:
-    """A file to patch."""
-
-    project: Project
-    src: str
-    dest: str
-    variables: Optional[Variables] = None
-
-    def __init__(
-        self,
-        project: Project,
-        src: Optional[str] = None,
-        dest: Optional[str] = None,
-        variables: Optional[Variables] = None,
-        config: Optional[FileConfig] = None,
-    ):
-        self.project = project
-        if config:
-            self.src = config["src"]
-            self.dest = config["dest"]
-            if "variables" in config:
-                self.variables = config["variables"]
-        if src:
-            self.src = src
-        if dest:
-            self.dest = dest
-        if variables:
-            self.variables = variables
-
-    def _setup_template(self) -> Template:
-        env = setup_template_env(self.project.base_dir)
-        env.filters.update(filters.collection)  # type: ignore
-        template = env.get_template(self.src)
-        template.globals.update(functions.collection)
-        if self.project.py_project:
-            template.globals.update(py_project=self.project.py_project)
-            if self.project.py_project.repository:
-                try:
-                    github = Github(self.project.py_project.repository)
-                    template.globals.update(github=github)
-                except Exception:
-                    pass
-
-        template.globals.update(badge=Badge(self.project))
-        return template
-
-    def patch(self) -> str:
-        if config.verbosity > 0:
-            print("Patch file dest: {} src: {}".format(self.src, self.dest))
-        template = self._setup_template()
-        variables: Dict[str, str] = {}
-        if self.variables:
-            for k, v in self.variables.items():
-                variables[k] = Replacement(v).get()
-        rendered = template.render(**variables)
-        # Remove multiple newlines
-        rendered = re.sub(r"\n\s*\n", "\n\n", rendered)
-        if config.verbosity > 1:
-            print(rendered)
-        dest = self.project.base_dir / self.dest
-        dest.write_text(rendered)
-        return rendered
-
-
-class SimplePyProject:
-    """Contain the attributes of a pyproject.toml file that interest us"""
-
-    py_project: PyProject
-
-    def __init__(self, py_project: PyProject):
-        self.py_project = py_project
-
-    @cached_property
-    def name(self) -> str | None:
-        if self.py_project.tool and self.py_project.tool["poetry"]["name"]:
-            return self.py_project.tool["poetry"]["name"]
-
-    @cached_property
-    def name_normalized(self):
-        if self.name:
-            return re.sub(r"[-_.]+", "-", self.name).lower()
-
-    @cached_property
-    def repository(self) -> str | None:
-        if self.py_project.tool and self.py_project.tool["poetry"]["repository"]:
-            return self.py_project.tool["poetry"]["repository"]
-
-
-class Project:
-    """A project corresponds to a code repository. In its root there is a
-    README file."""
-
-    base_dir: Path
-
-    def __init__(self, base_dir: str | Path):
-        if isinstance(base_dir, str):
-            self.base_dir = Path(base_dir)
-        else:
-            self.base_dir = base_dir
-
-    @cached_property
-    def _py_project(self) -> PyProject | None:
-        """"""
-        path = self.base_dir / "pyproject.toml"
-        if path.exists():
-            return PyProject().load(path)  # type: ignore
-
-    @cached_property
-    def py_project(self) -> SimplePyProject | None:
-        py_project = self._py_project
-        if py_project:
-            return SimplePyProject(py_project)
-
-    @cached_property
-    def py_project_config(self) -> Dict[str, Any] | None:
-        if self._py_project and "readme_patcher" in self._py_project.tool:
-            return self._py_project.tool["readme_patcher"]
-
-    @cached_property
-    def github(self) -> Github | None:
-        if self.py_project and self.py_project.repository:
-            return Github(self.py_project.repository)
-
-    def patch_file(
-        self, src: str, dest: str, variables: Optional[Variables] = None
-    ) -> str:
-        return File(project=self, src=src, dest=dest, variables=variables).patch()
-
-    def _patch_files_specified_in_toml(self, config: Dict[str, Any]) -> List[str]:
-        rendered: List[str] = []
-        for file_config in config["file"]:
-            file = File(project=self, config=file_config)
-            rendered.append(file.patch())
-        return rendered
-
-    def _patch_default(self) -> str:
-        return File(project=self, src="README_template.rst", dest="README.rst").patch()
-
-    def patch(self) -> List[str]:
-        config = self.py_project_config
-        if config:
-            return self._patch_files_specified_in_toml(config)
-        else:
-            return [self._patch_default()]
-
-
 def main():
-    global config
-    config = setup_argument_parser()
+    config.args = setup_argument_parser()
     pyproject_toml = search_for_pyproject_toml()
     base_dir: str | Path
     if pyproject_toml:
@@ -242,7 +34,7 @@ def main():
     else:
         base_dir = os.getcwd()
 
-    if config.verbosity > 0:
+    if config.args.verbosity > 0:
         print("Found project in {}".format(base_dir))
 
     Project(base_dir).patch()

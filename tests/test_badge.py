@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from .helper import project, read_file_content, get_path
+from .helper import get_path, project, read_file_content
 
 
 class BadgeTest(unittest.TestCase):

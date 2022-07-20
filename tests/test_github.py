@@ -1,6 +1,5 @@
 import unittest
 
-
 from readme_patcher.github import Github
 
 
