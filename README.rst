@@ -4,6 +4,7 @@
 
 .. image:: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml/badge.svg
     :target: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml
+    :alt: Tests
 
 readme_patcher
 ==============

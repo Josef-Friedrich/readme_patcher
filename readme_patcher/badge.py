@@ -44,7 +44,7 @@ class Badge:
         )
 
     def github_workflow(
-        self, workflow: str = "tests", alt: Optional[str] = None
+        self, workflow: str = "tests", alt: Optional[str] = 'Tests'
     ) -> str:
         url = "https://github.com/{}/actions/workflows/{}.yml".format(
             self._github.full_name, workflow
