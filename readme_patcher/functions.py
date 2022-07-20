@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """https://jinja.palletsprojects.com/en/3.1.x/api/#custom-filters"""
 
 
