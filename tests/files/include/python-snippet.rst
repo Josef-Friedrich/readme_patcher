@@ -1,1 +1,1 @@
-{% include 'include/python-snippet.py' %}
+{% include 'include/python-snippet.py' | code %}

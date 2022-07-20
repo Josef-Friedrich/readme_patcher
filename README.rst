@@ -43,8 +43,8 @@ badge
 
 .. code-block:: jinja
 
-    {{ badge.github_workflow('tests' 'Tests') }}
     {{ badge.pypi }}
+    {{ badge.github_workflow('tests' 'Tests') }}
     {{ badge.readthedocs }}
 
 Functions
@@ -69,13 +69,25 @@ code
 
 .. code-block:: jinja
 
-    {{ func('os.getcwd') | code }}
+    {{ 'print("true")' | code('python') }}
+
+::
+
+    .. code-block:: python
+
+        print("true")
 
 literal
 
 .. code-block:: jinja
 
-    {{ func('os.getcwd') | code }}
+    {{ func('os.getcwd') | literal }}
+
+::
+
+    ::
+
+        /home/repos/project
 
 Configuration
 -------------
