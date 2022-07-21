@@ -5,7 +5,7 @@ from functools import cached_property
 from typing import Optional
 
 if typing.TYPE_CHECKING:
-    from .github import Github
+    from .github import GithubRepository
     from .project import Project
     from .py_project import SimplePyProject
 
@@ -18,7 +18,7 @@ class Badge:
         self.project = project
 
     @cached_property
-    def _github(self) -> "Github":
+    def _github(self) -> "GithubRepository":
         if not self.project.github:
             raise Exception("No github repo found")
         return self.project.github
@@ -49,7 +49,7 @@ class Badge:
         self, workflow: str = "tests", alt: Optional[str] = "Tests"
     ) -> str:
         url = "https://github.com/{}/actions/workflows/{}.yml".format(
-            self._github.full_name, workflow
+            self._github['full_name'], workflow
         )
         return self._linked_image(url + "/badge.svg", url, alt)
 

@@ -2,7 +2,7 @@
 
 import unittest
 
-from .helper import patch
+from tests.helper import patch
 
 
 class JinjaTest(unittest.TestCase):
@@ -11,3 +11,7 @@ class JinjaTest(unittest.TestCase):
             patch("include/python-snippet.rst"),
             "def example():\n    print('Example')\n\n",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()

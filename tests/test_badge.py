@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from .helper import get_path, project, read_file_content
+from tests.helper import get_path, project, read_file_content
 
 
 class BadgeTest(unittest.TestCase):
@@ -22,3 +22,7 @@ class BadgeTest(unittest.TestCase):
 
     def test_readthedocs(self):
         self.assert_patch_file("readthedocs")
+
+
+if __name__ == "__main__":
+    unittest.main()

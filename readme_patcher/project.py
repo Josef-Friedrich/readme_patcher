@@ -10,7 +10,7 @@ from pyproject_parser import PyProject
 from readme_patcher.template import setup_environment
 
 from .file import File, Variables
-from .github import Github
+from .github import GithubRepository, request_github_api
 from .py_project import SimplePyProject
 
 
@@ -47,9 +47,9 @@ class Project:
         return None
 
     @cached_property
-    def github(self) -> Github | None:
+    def github(self) -> GithubRepository | None:
         if self.py_project and self.py_project.repository:
-            return Github(self.py_project.repository)
+            return request_github_api(self.py_project.repository)
         return None
 
     def patch_file(

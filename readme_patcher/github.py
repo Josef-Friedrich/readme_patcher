@@ -1,31 +1,23 @@
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing_extensions import TypedDict
 
 import requests
 
 
-class Github:
+class GithubRepository(TypedDict):
+    """https://docs.github.com/en/rest/repos/repos#get-a-repository"""
 
-    response: Any
+    name: str
+    full_name: str
+    description: str
 
-    def __init__(self, url: str):
-        match = re.match(".*github\\.com/([^/]*/[^/]*).*", url)
-        if not match:
-            raise Exception("Wrong github URL.")
-        response = requests.get("https://api.github.com/repos/{}".format(match[1]))
-        response.raise_for_status()
-        self.response = response.json()
 
-    @property
-    def name(self) -> str:
-        return self.response["name"]
-
-    @property
-    def full_name(self) -> str:
-        return self.response["full_name"]
-
-    @property
-    def description(self) -> str:
-        return self.response["description"]
+def request_github_api(url: str) -> GithubRepository:
+    match = re.match(".*github\\.com/([^/]*/[^/]*).*", url)
+    if not match:
+        raise Exception("Wrong github URL.")
+    response = requests.get("https://api.github.com/repos/{}".format(match[1]))
+    response.raise_for_status()
+    return response.json()

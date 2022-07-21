@@ -1,6 +1,6 @@
 import unittest
 
-from .helper import patch
+from tests.helper import patch
 
 
 class FiltersTest(unittest.TestCase):
@@ -27,3 +27,7 @@ class FiltersTest(unittest.TestCase):
             patch("filters/heading.rst"),
             "#\nheading\n=======\n#\n",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()

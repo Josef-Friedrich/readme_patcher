@@ -2,7 +2,7 @@
 
 import unittest
 
-from .helper import project
+from tests.helper import project
 
 
 class ClassProjectTest(unittest.TestCase):
@@ -13,3 +13,7 @@ class ClassProjectTest(unittest.TestCase):
             rendered[0],
             "README\n======\n\nhttps://github.com/Josef-Friedrich/readme_patcher\n",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()

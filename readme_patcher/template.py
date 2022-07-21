@@ -5,7 +5,6 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from . import filters, functions
 from .badge import Badge
-from .github import Github
 
 if typing.TYPE_CHECKING:
     from .project import Project
@@ -31,7 +30,7 @@ def setup_environment(project: 'Project') -> Environment:
         environment.globals.update(py_project=project.py_project)
         if project.py_project.repository:
             try:
-                github = Github(project.py_project.repository)
+                github = project.github
                 environment.globals.update(github=github)
             except Exception:
                 pass

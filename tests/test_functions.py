@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from .helper import patch, project, get_tmp_file_path
+from tests.helper import patch, project, get_tmp_file_path
 
 
 class FunctionsTest(unittest.TestCase):
@@ -16,3 +16,7 @@ class FunctionsTest(unittest.TestCase):
             project.patch_file("read.rst", get_tmp_file_path()),
             "#\n:: \n\n    Example text\n\n#\n",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()
