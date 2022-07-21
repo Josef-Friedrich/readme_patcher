@@ -5,6 +5,9 @@ from typing import Optional
 
 from readme_patcher import Project
 from readme_patcher.file import Variables
+import json
+
+import responses
 
 TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 
@@ -21,6 +24,11 @@ def read_file_content(rel_path: str) -> str:
     file = open(get_path(rel_path), "r")
     return file.read()
 
+
+responses.get(
+    "https://api.github.com/repos/Josef-Friedrich/readme_patcher",
+    json=json.loads(read_file_content("github.json")),
+)
 
 project_test_files_folder = Project(TEST_FILES_FOLDER)
 

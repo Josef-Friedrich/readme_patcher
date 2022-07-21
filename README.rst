@@ -33,11 +33,16 @@ py_project
 github
 ^^^^^^
 
+https://docs.github.com/en/rest/repos/repos#get-a-repository
+
+https://api.github.com/repos/Josef-Friedrich/readme-patcher
+
 .. code-block:: jinja
 
     {{ github.name }}
     {{ github.full_name }}
     {{ github.description }}
+    {{ github.owner.login }}
 
 badge
 ^^^^^

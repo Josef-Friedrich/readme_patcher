@@ -4,10 +4,12 @@ import unittest
 
 from tests.helper import project
 
+import responses
+
 
 class ClassProjectTest(unittest.TestCase):
+    @responses.activate
     def test_property_py_project(self):
-
         rendered = project.patch()
         self.assertEqual(
             rendered[0],

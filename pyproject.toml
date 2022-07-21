@@ -20,6 +20,7 @@ types-requests = "^2.28.2"
 [tool.poetry.group.dev.dependencies]
 black = "22.6.0"
 isort = "^5.10.1"
+responses = "^0.21.0"
 
 [build-system]
 requires = ["poetry>=1.2.0b2", "setuptools", "setuptools-scm"]
