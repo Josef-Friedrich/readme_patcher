@@ -1,9 +1,8 @@
 import unittest
 
-import responses
 
 from readme_patcher.github import GithubRepository, request_github_api
-from tests.helper import project
+from tests.helper import project, activate_requests_mock
 
 
 class GithubTest(unittest.TestCase):
@@ -11,15 +10,15 @@ class GithubTest(unittest.TestCase):
         "https://github.com/Josef-Friedrich/readme_patcher/"
     )
 
-    @responses.activate
+    @activate_requests_mock
     def test_name(self):
         self.assertEqual(self.github["name"], "readme_patcher")
 
-    @responses.activate
+    @activate_requests_mock
     def test_full_name(self):
         self.assertEqual(self.github["full_name"], "Josef-Friedrich/readme_patcher")
 
-    @responses.activate
+    @activate_requests_mock
     def test_description(self):
         self.assertEqual(
             self.github["description"],
@@ -27,7 +26,7 @@ class GithubTest(unittest.TestCase):
             "Allow input from functions calls and cli output.",
         )
 
-    @responses.activate
+    @activate_requests_mock
     def test_integration(self):
         self.assertEqual(
             project.patch_file(

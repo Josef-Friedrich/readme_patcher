@@ -35,7 +35,7 @@ github
 
 https://docs.github.com/en/rest/repos/repos#get-a-repository
 
-https://api.github.com/repos/Josef-Friedrich/readme-patcher
+https://api.github.com/repos/Josef-Friedrich/readme_patcher
 
 .. code-block:: jinja
 

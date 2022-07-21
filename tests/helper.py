@@ -30,6 +30,8 @@ responses.get(
     json=json.loads(read_file_content("github.json")),
 )
 
+activate_requests_mock = responses.activate
+
 project_test_files_folder = Project(TEST_FILES_FOLDER)
 
 

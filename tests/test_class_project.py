@@ -2,13 +2,12 @@
 
 import unittest
 
-import responses
 
-from tests.helper import project
+from tests.helper import project, activate_requests_mock
 
 
 class ClassProjectTest(unittest.TestCase):
-    @responses.activate
+    @activate_requests_mock
     def test_property_py_project(self):
         rendered = project.patch()
         self.assertEqual(

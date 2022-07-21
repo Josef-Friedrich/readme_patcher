@@ -49,7 +49,7 @@ class Badge:
         self, workflow: str = "tests", alt: Optional[str] = "Tests"
     ) -> str:
         url = "https://github.com/{}/actions/workflows/{}.yml".format(
-            self._github['full_name'], workflow
+            self._github["full_name"], workflow
         )
         return self._linked_image(url + "/badge.svg", url, alt)
 

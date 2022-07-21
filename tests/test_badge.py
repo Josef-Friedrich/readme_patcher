@@ -1,9 +1,8 @@
 import os
 import unittest
 
-import responses
 
-from tests.helper import get_path, project, read_file_content
+from tests.helper import get_path, project, read_file_content, activate_requests_mock
 
 
 class BadgeTest(unittest.TestCase):
@@ -16,15 +15,15 @@ class BadgeTest(unittest.TestCase):
         os.remove(get_path("project/badge/{}_tmp.rst".format(basename)))
         self.assertEqual(rendered, expected)
 
-    @responses.activate
+    @activate_requests_mock
     def test_pypi(self):
         self.assert_patch_file("pypi")
 
-    @responses.activate
+    @activate_requests_mock
     def test_github_workflow(self):
         self.assert_patch_file("github_workflow")
 
-    @responses.activate
+    @activate_requests_mock
     def test_readthedocs(self):
         self.assert_patch_file("readthedocs")
 

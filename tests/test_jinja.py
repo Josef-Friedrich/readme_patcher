@@ -2,17 +2,16 @@
 
 import unittest
 
-import responses
 
-from tests.helper import patch
+from tests.helper import patch, activate_requests_mock
 
 
 class JinjaTest(unittest.TestCase):
-    @responses.activate
+    @activate_requests_mock
     def test_include(self):
         self.assertEqual(
             patch("include/python-snippet.rst"),
-            "def example():\n    print('Example')\n\n",
+            "def example():\n    print(\"Example\")\n\n",
         )
 
 

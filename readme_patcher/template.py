@@ -10,7 +10,7 @@ if typing.TYPE_CHECKING:
     from .project import Project
 
 
-def setup_environment(project: 'Project') -> Environment:
+def setup_environment(project: "Project") -> Environment:
     """
     Setup the search paths for the template engine Jinja2. ``os.path.sep`` is
 

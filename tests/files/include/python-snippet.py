@@ -1,2 +1,2 @@
 def example():
-    print('Example')
+    print("Example")
