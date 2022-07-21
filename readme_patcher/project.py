@@ -3,8 +3,8 @@ from __future__ import annotations
 from functools import cached_property
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from jinja2 import Environment
 
+from jinja2 import Environment
 from pyproject_parser import PyProject
 
 from readme_patcher.template import setup_environment

@@ -1,9 +1,9 @@
 import unittest
 
+import responses
+
 from readme_patcher.github import GithubRepository, request_github_api
 from tests.helper import project
-
-import responses
 
 
 class GithubTest(unittest.TestCase):

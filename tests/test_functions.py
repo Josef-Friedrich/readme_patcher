@@ -1,9 +1,9 @@
 import os
 import unittest
 
-from tests.helper import patch, project, get_tmp_file_path
-
 import responses
+
+from tests.helper import get_tmp_file_path, patch, project
 
 
 class FunctionsTest(unittest.TestCase):

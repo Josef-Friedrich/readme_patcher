@@ -1,13 +1,13 @@
+import json
 import os
 import tempfile
 from pathlib import Path
 from typing import Optional
 
+import responses
+
 from readme_patcher import Project
 from readme_patcher.file import Variables
-import json
-
-import responses
 
 TEST_FILES_FOLDER = os.path.join(os.path.dirname(__file__), "files")
 

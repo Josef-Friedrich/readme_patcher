@@ -2,9 +2,9 @@
 
 import unittest
 
-from tests.helper import project
-
 import responses
+
+from tests.helper import project
 
 
 class ClassProjectTest(unittest.TestCase):

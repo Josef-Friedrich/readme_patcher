@@ -1,8 +1,8 @@
 import unittest
 
-from tests.helper import patch
-
 import responses
+
+from tests.helper import patch
 
 
 class FiltersTest(unittest.TestCase):

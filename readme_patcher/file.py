@@ -6,7 +6,7 @@ from typing import Dict, Optional, TypedDict
 
 from jinja2 import Template
 
-from . import functions, config
+from . import config, functions
 
 if typing.TYPE_CHECKING:
     from .project import Project

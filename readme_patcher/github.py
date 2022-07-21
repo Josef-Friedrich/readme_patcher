@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import re
-from typing_extensions import TypedDict
 
 import requests
+from typing_extensions import TypedDict
 
 
 class GithubRepository(TypedDict):
