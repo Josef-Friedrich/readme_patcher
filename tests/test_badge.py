@@ -1,8 +1,7 @@
 import os
 import unittest
 
-
-from tests.helper import get_path, project, read_file_content, activate_requests_mock
+from tests.helper import activate_requests_mock, get_path, project, read_file_content
 
 
 class BadgeTest(unittest.TestCase):

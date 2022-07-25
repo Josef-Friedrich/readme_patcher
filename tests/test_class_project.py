@@ -2,8 +2,7 @@
 
 import unittest
 
-
-from tests.helper import project, activate_requests_mock
+from tests.helper import activate_requests_mock, project
 
 
 class ClassProjectTest(unittest.TestCase):

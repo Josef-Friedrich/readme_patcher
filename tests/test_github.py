@@ -1,8 +1,7 @@
 import unittest
 
-
 from readme_patcher.github import GithubRepository, request_github_api
-from tests.helper import project, activate_requests_mock
+from tests.helper import activate_requests_mock, project
 
 
 class GithubTest(unittest.TestCase):

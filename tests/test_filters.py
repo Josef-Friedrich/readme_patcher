@@ -1,7 +1,6 @@
 import unittest
 
-
-from tests.helper import patch, activate_requests_mock
+from tests.helper import activate_requests_mock, patch
 
 
 class FiltersTest(unittest.TestCase):

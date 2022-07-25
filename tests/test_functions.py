@@ -1,8 +1,7 @@
 import os
 import unittest
 
-
-from tests.helper import get_tmp_file_path, patch, project, activate_requests_mock
+from tests.helper import activate_requests_mock, get_tmp_file_path, patch, project
 
 
 class FunctionsTest(unittest.TestCase):
