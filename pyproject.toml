@@ -19,7 +19,7 @@ types-requests = "^2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0"
-responses = "^0.21.0"
+responses = "^0.25.0"
 pytest = "^8"
 
 [build-system]
