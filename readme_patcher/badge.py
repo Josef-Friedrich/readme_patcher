@@ -11,7 +11,6 @@ if typing.TYPE_CHECKING:
 
 
 class Badge:
-
     project: "Project"
 
     def __init__(self, project: "Project"):

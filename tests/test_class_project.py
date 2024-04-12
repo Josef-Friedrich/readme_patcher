@@ -1,19 +1,13 @@
 """Test some jinja features"""
 
-import unittest
-
 from tests.helper import activate_requests_mock, project
 
 
-class ClassProjectTest(unittest.TestCase):
+class TestClassProject:
     @activate_requests_mock
-    def test_property_py_project(self):
+    def test_property_py_project(self) -> None:
         rendered = project.patch()
-        self.assertEqual(
-            rendered[0],
-            "README\n======\n\nhttps://github.com/Josef-Friedrich/readme_patcher\n",
+        assert (
+            rendered[0]
+            == "README\n======\n\nhttps://github.com/Josef-Friedrich/readme_patcher\n"
         )
-
-
-if __name__ == "__main__":
-    unittest.main()
