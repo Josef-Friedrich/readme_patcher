@@ -1,11 +1,9 @@
-from __future__ import annotations
-
-import os
-
 """https://jinja.palletsprojects.com/en/3.1.x/api/#custom-filters"""
 
+from __future__ import annotations
 
 import importlib
+import os
 import re
 import subprocess
 
