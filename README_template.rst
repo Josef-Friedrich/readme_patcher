@@ -55,14 +55,22 @@ badge
 Functions
 ---------
 
-cli: Combined output (stdout and stderr) of command line interfaces (scripts / binaries)
+``cli`` (Command line interface): Combined output (stdout and stderr) of
+command line interfaces (scripts / binaries)
 
 .. code-block:: jinja
 {% raw %}
     {{ cli('awk --help') }}
 {% endraw %}
 
-func: return values of Python functions
+It is recommended to use the ``cli`` function together with the literal filter.
+
+.. code-block:: jinja
+{% raw %}
+    {{ cli('awk --help') | literal }}
+{% endraw %}
+
+``func``: return values of Python functions
 
 .. code-block:: jinja
 {% raw %}

@@ -21,6 +21,7 @@ types-requests = "^2"
 ruff = "^0"
 responses = "^0.25.0"
 pytest = "^8"
+tox = "^4"
 
 [build-system]
 requires = ["poetry-core"]
