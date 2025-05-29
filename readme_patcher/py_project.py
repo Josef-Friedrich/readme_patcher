@@ -17,7 +17,11 @@ class SimplePyProject:
 
     @cached_property
     def _project(self) -> Dict[str, Any] | None:
-        if self.py_project.tool and self.py_project.tool["poetry"]:
+        if (
+            self.py_project.tool
+            and "poetry" in self.py_project.tool
+            and self.py_project.tool["poetry"]
+        ):
             return self.py_project.tool["poetry"]
         if self.py_project.project:
             return self.py_project.project  # type: ignore
