@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-<!-- insertion marker -->
+## [v0.7.1](https://github.com/Josef-Friedrich/readme_patcher/releases/tag/v0.7.1) - 2025-05-29
+
+<small>[Compare with v0.7.0](https://github.com/Josef-Friedrich/readme_patcher/compare/v0.7.0...v0.7.1)</small>
+
+### Fixed
+
+- Fix the parsing of `pyproject.toml` compatible with `uv`
+
 ## [v0.7.0](https://github.com/Josef-Friedrich/readme_patcher/releases/tag/v0.7.0) - 2024-04-12
 
 <small>[Compare with v0.6.0](https://github.com/Josef-Friedrich/readme_patcher/compare/v0.6.0...v0.7.0)</small>
@@ -73,4 +80,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fix file detection ([fd26e03](https://github.com/Josef-Friedrich/readme_patcher/commit/fd26e038f943177eca6aac29fcba2480ba3707a3) by Josef Friedrich).
 - Fix union notation ([9d72330](https://github.com/Josef-Friedrich/readme_patcher/commit/9d7233075aa570565981ac5c4f50cb95bd52f5d3) by Josef Friedrich).
 - Fix 3.8 compatibility ([fcc8d92](https://github.com/Josef-Friedrich/readme_patcher/commit/fcc8d924109ab39b0610572eea74f8c1027504c3) by Josef Friedrich).
-

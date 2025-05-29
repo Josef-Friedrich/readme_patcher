@@ -13,8 +13,6 @@ test_quick:
 
 install: update
 
-
-
 # https://github.com/python-poetry/poetry/issues/34#issuecomment-1054626460
 # pip install --editable . # error: externally-managed-environment -> pipx
 install_editable:
