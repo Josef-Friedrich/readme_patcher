@@ -2,22 +2,32 @@ from __future__ import annotations
 
 import re
 from functools import cached_property
+from typing import Any, Dict
 
 from pyproject_parser import PyProject
+from pyproject_parser.type_hints import ProjectDict
 
 
 class SimplePyProject:
-    """Contain the attributes of a pyproject.toml file that interest us"""
+    """Contains the attributes of a pyproject.toml file that we are interested in."""
 
     py_project: PyProject
 
-    def __init__(self, py_project: PyProject):
+    def __init__(self, py_project: PyProject) -> None:
         self.py_project = py_project
 
     @cached_property
+    def _project(self) -> Dict[str, Any] | None:
+        if self.py_project.tool and self.py_project.tool["poetry"]:
+            return self.py_project.tool["poetry"]
+        if self.py_project.project:
+            return self.py_project.project  # type: ignore
+        return None
+
+    @cached_property
     def name(self) -> str | None:
-        if self.py_project.tool and self.py_project.tool["poetry"]["name"]:
-            return self.py_project.tool["poetry"]["name"]
+        if self._project and self._project["name"]:
+            return self._project["name"]
         return None
 
     @cached_property
@@ -28,6 +38,10 @@ class SimplePyProject:
 
     @cached_property
     def repository(self) -> str | None:
-        if self.py_project.tool and self.py_project.tool["poetry"]["repository"]:
-            return self.py_project.tool["poetry"]["repository"]
+        if self._project is None:
+            return None
+        if "repository" in self._project:
+            return self._project["repository"]
+        if self._project["urls"] and self._project["urls"]["Repository"]:
+            return self._project["urls"]["Repository"]
         return None

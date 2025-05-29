@@ -1,5 +1,15 @@
+all: test format docs lint type_check
+
 test:
-	poetry run tox
+	uv run --isolated --python=3.8 pytest
+	uv run --isolated --python=3.9 pytest
+	uv run --isolated --python=3.10 pytest
+	uv run --isolated --python=3.11 pytest
+	uv run --isolated --python=3.12 pytest
+	uv run --isolated --python=3.13 pytest
+
+test_quick:
+	uv run --isolated --python=3.12 pytest
 
 install: update
 
@@ -8,31 +18,35 @@ clear_poetry_cache:
 	poetry cache clear _default_cache --all --no-interaction
 
 # https://github.com/python-poetry/poetry/issues/34#issuecomment-1054626460
+# pip install --editable . # error: externally-managed-environment -> pipx
 install_editable:
-	pip install -e .
+	pipx install --force --editable .
 
 update: clear_poetry_cache
 	poetry lock
 	poetry install
 
 build:
-	poetry build
+	uv build
 
 publish:
-	poetry build
-	poetry publish
+	uv build
+	uv publish
 
 format:
-	poetry run tox -e format
+	uv run ruff check --select I --fix .
+	uv run ruff format
 
 docs:
-	poetry run tox -e docs
-	xdg-open docs/_build/index.html > /dev/null 2>&1
-
-lint:
-	poetry run tox -e lint
+	uv run --isolated --python=3.13 readme-patcher
 
 pin_docs_requirements:
-	pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
+	uv run pip-compile --output-file=docs/requirements.txt docs/requirements.in pyproject.toml
+
+lint:
+	uv run ruff check
+
+type_check:
+	uv run mypy typings python_boilerplate tests
 
 .PHONY: test install install_editable update build publish format docs lint pin_docs_requirements
