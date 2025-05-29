@@ -25,7 +25,7 @@ def search_for_pyproject_toml() -> Optional[Path]:
     return None
 
 
-def main():
+def main() -> None:
     config.args = setup_argument_parser()
     pyproject_toml = search_for_pyproject_toml()
     base_dir: str | Path

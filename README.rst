@@ -1,5 +1,5 @@
-.. image:: http://img.shields.io/pypi/v/None.svg
-    :target: https://pypi.org/project/None
+.. image:: http://img.shields.io/pypi/v/readme-patcher.svg
+    :target: https://pypi.org/project/readme-patcher
     :alt: This package on the Python Package Index
 
 .. image:: https://github.com/Josef-Friedrich/readme_patcher/actions/workflows/tests.yml/badge.svg

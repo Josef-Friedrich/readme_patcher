@@ -21,7 +21,13 @@ Repository = "https://github.com/Josef-Friedrich/readme_patcher"
 readme-patcher = "readme_patcher:main"
 
 [dependency-groups]
-dev = ["ruff>=0,<1", "responses>=0.25.0,<0.26", "pytest>=8,<9", "tox>=4,<5"]
+dev = [
+    "ruff>=0,<1",
+    "responses>=0.25.0,<0.26",
+    "pytest>=8,<9",
+    "tox>=4,<5",
+    "mypy>=1,<2",
+]
 
 [build-system]
 requires = ["hatchling"]

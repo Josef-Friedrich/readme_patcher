@@ -5,7 +5,6 @@ from functools import cached_property
 from typing import Any, Dict
 
 from pyproject_parser import PyProject
-from pyproject_parser.type_hints import ProjectDict
 
 
 class SimplePyProject:
