@@ -1,8 +1,6 @@
 all: test format docs lint type_check
 
 test:
-	uv run --isolated --python=3.8 pytest
-	uv run --isolated --python=3.9 pytest
 	uv run --isolated --python=3.10 pytest
 	uv run --isolated --python=3.11 pytest
 	uv run --isolated --python=3.12 pytest
@@ -13,14 +11,8 @@ test_quick:
 
 install: update
 
-# https://github.com/python-poetry/poetry/issues/34#issuecomment-1054626460
-# pip install --editable . # error: externally-managed-environment -> pipx
-install_editable:
-	pipx install --force --editable .
-
-update: clear_poetry_cache
-	poetry lock
-	poetry install
+update:
+	uv sync --upgrade
 
 build:
 	uv build
@@ -34,7 +26,7 @@ format:
 	uv run ruff format
 
 docs:
-	uv run --isolated --python=3.13 readme-patcher
+	uv run --isolated readme-patcher
 
 lint:
 	uv run ruff check

@@ -1,12 +1,14 @@
 ---
 # https://packaging.python.org/en/latest/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+
+# https://medium.com/@nipunweerasiri/publishing-python-packages-to-pypi-using-uv-and-github-workflows-with-trusted-publishing-47bdfab162db
+
 name: Build and Publish to PyPI
 
 on:
   push:
-    # Pattern matched against refs/tags
     tags:
-    - '*' # Push events to every tag not containing /
+      - "v*"
 
 jobs:
   build-and-publish:
@@ -14,22 +16,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/marketplace/actions/checkout
-    - name: Checkout git repository
-      uses: actions/checkout@v4
-      # https://github.com/marketplace/actions/setup-python
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.x"
+      - name: Checkout git repository
+        uses: actions/checkout@v4
 
-    # Build ####################################################################
+      # https://docs.astral.sh/uv/guides/integration/github/
+      - name: Install uv and setup the python version
+        uses: astral-sh/setup-uv@v5
 
-    # https://github.com/marketplace/actions/publish-python-poetry-package
-    - name: Publish to PyPI
-      # https://github.com/JRubics/poetry-publish/issues/39
-      uses: JRubics/poetry-publish@v2.0
-      with:
-        # https://pypi.org/manage/account/token/
-        # https://github.com/<owner>/<repo>/settings/secrets/actions/new
-        pypi_token: ${{ secrets.PYPI_API_TOKEN }}
-      if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+      - name: Install the project
+        run: uv sync --all-groups
+
+      - name: Build wheel
+        run: uv build
+
+      - name: Publish package
+        run: uv publish
