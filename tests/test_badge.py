@@ -3,24 +3,26 @@ import os
 from tests.helper import activate_requests_mock, get_path, project, read_file_content
 
 
-class TestBadge:
-    def assert_patch_file(self, basename: str) -> None:
-        rendered = project.patch_file(
-            src="badge/{}_template.rst".format(basename),
-            dest="badge/{}_tmp.rst".format(basename),
-        )
-        expected = read_file_content("project/badge/{}.rst".format(basename))
-        os.remove(get_path("project/badge/{}_tmp.rst".format(basename)))
-        assert rendered == expected
+def assert_patch_file(basename: str) -> None:
+    rendered = project.patch_file(
+        src="badge/{}_template.rst".format(basename),
+        dest="badge/{}_tmp.rst".format(basename),
+    )
+    expected = read_file_content("project/badge/{}.rst".format(basename))
+    os.remove(get_path("project/badge/{}_tmp.rst".format(basename)))
+    assert rendered == expected
 
-    @activate_requests_mock
-    def test_pypi(self) -> None:
-        self.assert_patch_file("pypi")
 
-    @activate_requests_mock
-    def test_github_workflow(self) -> None:
-        self.assert_patch_file("github_workflow")
+@activate_requests_mock
+def test_pypi() -> None:
+    assert_patch_file("pypi")
 
-    @activate_requests_mock
-    def test_readthedocs(self) -> None:
-        self.assert_patch_file("readthedocs")
+
+@activate_requests_mock
+def test_github_workflow() -> None:
+    assert_patch_file("github_workflow")
+
+
+@activate_requests_mock
+def test_readthedocs() -> None:
+    assert_patch_file("readthedocs")
