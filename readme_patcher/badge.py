@@ -29,37 +29,29 @@ class Badge:
         return self.project.py_project
 
     def _linked_image(self, image: str, link: str, alt: Optional[str] = None) -> str:
-        markup = ".. image:: {}\n".format(image) + "    :target: {}\n".format(link)
+        markup = f".. image:: {image}\n" + f"    :target: {link}\n"
         if alt:
-            markup += "    :alt: {}\n".format(alt)
+            markup += f"    :alt: {alt}\n"
         return markup
 
     @cached_property
     def pypi(self) -> str:
         return self._linked_image(
-            "http://img.shields.io/pypi/v/{}.svg".format(
-                self._py_project.name_normalized
-            ),
-            "https://pypi.org/project/{}".format(self._py_project.name_normalized),
+            f"http://img.shields.io/pypi/v/{self._py_project.name_normalized}.svg",
+            f"https://pypi.org/project/{self._py_project.name_normalized}",
             "This package on the Python Package Index",
         )
 
     def github_workflow(
         self, workflow: str = "tests", alt: Optional[str] = "Tests"
     ) -> str:
-        url = "https://github.com/{}/actions/workflows/{}.yml".format(
-            self._github["full_name"], workflow
-        )
+        url = f"https://github.com/{self._github['full_name']}/actions/workflows/{workflow}.yml"
         return self._linked_image(url + "/badge.svg", url, alt)
 
     @cached_property
     def readthedocs(self) -> str:
         return self._linked_image(
-            "https://readthedocs.org/projects/{}/badge/?version=latest".format(
-                self._py_project.name_normalized
-            ),
-            "https://{}.readthedocs.io/en/latest/?badge=latest".format(
-                self._py_project.name_normalized
-            ),
+            f"https://readthedocs.org/projects/{self._py_project.name_normalized}/badge/?version=latest",
+            f"https://{self._py_project.name_normalized}.readthedocs.io/en/latest/?badge=latest",
             "Documentation Status",
         )
