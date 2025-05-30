@@ -1,6 +1,6 @@
 [project]
 name = "readme_patcher"
-version = "0.7.1"
+version = "0.7.2"
 description = "Generate README files from templates. Allow input from functions calls and cli output."
 authors = [{ name = "Josef Friedrich", email = "josef@friedrich.rocks" }]
 requires-python = "~=3.8"
