@@ -13,7 +13,7 @@ if typing.TYPE_CHECKING:
 class Badge:
     project: "Project"
 
-    def __init__(self, project: "Project"):
+    def __init__(self, project: "Project") -> None:
         self.project = project
 
     @cached_property

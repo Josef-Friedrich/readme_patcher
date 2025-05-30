@@ -17,7 +17,7 @@ class Replacement:
 
     raw: str
 
-    def __init__(self, raw: str):
+    def __init__(self, raw: str) -> None:
         self.raw = raw.strip()
 
     def get(self) -> str:
@@ -55,7 +55,7 @@ class File:
         dest: Optional[str] = None,
         variables: Optional[Variables] = None,
         config: Optional[FileConfig] = None,
-    ):
+    ) -> None:
         self.project = project
         if config:
             self.src = config["src"]

@@ -6,6 +6,7 @@ import importlib
 import os
 import re
 import subprocess
+from typing import Any, Callable
 
 from jinja2 import pass_context
 from jinja2.runtime import Context
@@ -34,7 +35,7 @@ def read_file_content(context: Context, path: str) -> str:
     return file.read()
 
 
-collection = {
+collection: dict[str, Callable[..., Any]] = {
     "cli": read_cli_output,
     "func": read_func_output,
     "read": read_file_content,

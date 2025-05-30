@@ -5,6 +5,8 @@ https://jinja.palletsprojects.com/en/3.1.x/api/#custom-filters
 
 from __future__ import annotations
 
+from typing import Any, Callable
+
 from jinja2.filters import do_indent
 
 
@@ -51,7 +53,7 @@ def heading(content: str, level: int = 1) -> str:
     return "\n" + content + "\n" + (underline * length) + "\n"
 
 
-collection = {
+collection: dict[str, Callable[..., Any]] = {
     "code": wrap_in_code_block,
     "literal": wrap_in_literal_block,
     "heading": heading,
