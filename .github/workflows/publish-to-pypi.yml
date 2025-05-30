@@ -14,6 +14,9 @@ jobs:
   build-and-publish:
     name: Build and Publish to PyPI
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
     steps:
       # https://github.com/marketplace/actions/checkout
       - name: Checkout git repository
