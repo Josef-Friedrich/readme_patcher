@@ -5,6 +5,7 @@ test:
 	uv run --isolated --python=3.11 pytest
 	uv run --isolated --python=3.12 pytest
 	uv run --isolated --python=3.13 pytest
+	uv run --isolated --python=3.14 pytest
 
 test_quick:
 	uv run --isolated --python=3.12 pytest
@@ -32,6 +33,6 @@ lint:
 	uv run ruff check
 
 type_check:
-	uv run mypy readme_patcher tests
+	uv run mypy src/readme_patcher tests
 
 .PHONY: test install install_editable update build publish format docs lint pin_docs_requirements
