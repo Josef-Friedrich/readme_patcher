@@ -5,7 +5,7 @@ description = "Generate README files from templates. Allow input from functions 
 authors = [{ name = "Josef Friedrich", email = "josef@friedrich.rocks" }]
 requires-python = "~=3.8"
 readme = "README.rst"
-license = { text = "MIT" }
+license = "MIT"
 classifiers = ["License :: OSI Approved :: MIT License"]
 dependencies = [
     "Jinja2>=3,<4",
